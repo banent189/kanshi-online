@@ -102,7 +102,7 @@ async function convertToPdf(
       pages.forEach(p => merged.addPage(p))
     }
     const bytes = await merged.save()
-    return { blob: new Blob([bytes], { type: 'application/pdf' }), fileName: `${baseName}.pdf`, ext: '.pdf' }
+    return { blob: new Blob([bytes.slice()], { type: 'application/pdf' }), fileName: `${baseName}.pdf`, ext: '.pdf' }
   }
 
   throw new Error('没有可转换的文件')
@@ -120,7 +120,7 @@ async function convertToDocx(
   if (imageFiles.length === 0) throw new Error('Word 转换仅支持图片文件')
 
   const { Document, Packer, Paragraph, ImageRun } = await import('docx')
-  const paragraphs: Paragraph[] = []
+  const paragraphs: InstanceType<typeof Paragraph>[] = []
 
   for (const f of imageFiles) {
     const buf = await f.arrayBuffer()

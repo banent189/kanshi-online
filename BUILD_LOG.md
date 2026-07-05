@@ -129,3 +129,70 @@
 - **删除「分享好友」按钮：** 微信里 `navigator.share()` 走不通，预览后用微信原生「···」菜单转发更自然
 - **fallback 修复：** `handleShare` 引用改为 `handlePrimaryAction`
 - **iOS PWA 分享修复搁置**（iOS 沙箱限制暂无法绕过）
+
+## v8 — 2026-07-05 | Cloudflare 部署修复 + 微信转发流程优化
+
+**修改文件：**
+
+| 文件 | 改动 |
+|------|------|
+| `vite.config.ts` → Cloudflare API | 设置构建命令 `npm run build`、输出目录 `dist`、生产分支 `master` |
+| Cloudflare DNS | 删除旧 Worker 记录，绑定 `kanshi.online` 到 Pages 项目 |
+| `src/modules/format-convert/pages/ConvertingPage.tsx` | 微信端按钮改为「打开并转发」+ 备注说明；去掉所有 emoji |
+| `src/modules/format-convert/pages/ConvertPage.tsx` | 去掉转换按钮 emoji |
+| `src/modules/format-convert/converters/imageToPdf.ts` | TS 6.0 类型兼容修复 |
+| `src/modules/format-convert/converters/index.ts` | TS 6.0 类型兼容修复 |
+| `src/sw.ts` | 去掉多余 `@ts-expect-error` |
+| `src/shared/utils/share.ts` | TS 6.0 未使用参数修复 |
+| `src/modules/media-clean/components/CanvasEditor.tsx` | TS 6.0 未使用变量修复 |
+| `src/modules/media-clean/components/ImageTab.tsx` | TS 6.0 未使用 import 修复 |
+
+**改动内容：**
+
+- **Cloudflare 配置修复：** 构建命令、输出目录、生产分支全部设对；删除关联旧 Worker 释放域名
+- **域名绑定：** `kanshi.online` 成功绑定到 Pages 项目，SSL 证书自动生效
+- **微信流程最终方案：** 单个「打开并转发」按钮，沿用 save/download 操作触发微信打开文件，右上角「···」转发
+- **按钮去 emoji：** 所有操作按钮改为纯文字
+- **TypeScript 6.0 兼容：** 修复因升级带来的 `Uint8Array`、`ArrayBufferLike`、`useRef` 等类型错误
+
+## v9 — 2026-07-05 | 纸质手帐风桌面系统 UI 重构
+
+**新增文件：**
+
+| 文件 | 说明 |
+|------|------|
+| `src/components/desk/LeftNav.tsx` | 桌面左侧固定导航（纸质标签样式） |
+| `src/components/desk/BottomNav.tsx` | 移动端底部导航（5 项匹配左侧） |
+| `src/components/desk/DeskSurface.tsx` | 桌面卡片组件（SearchBar/LifeCard/ToolCard/DrawerArea + 移动端变体） |
+| `src/components/desk/toolDefs.ts` | 工具卡定义（位置/旋转/装饰配置） |
+
+**修改文件：**
+
+| 文件 | 改动 |
+|------|------|
+| `src/pages/Home.tsx` | 完全重写：移除旧网格布局，替换为纸质桌面布局系统 |
+| `src/index.css` | 新增纸张纹理、纸胶带、回形针、手写体、桌面卡片等装饰样式 |
+| `src/modules/media-clean/index.tsx` | 模块名"媒体净化"→"去除水印" |
+| `src/modules/media-clean/pages/MediaCleanPage.tsx` | 页标题同步更新 |
+| `BUILD_LOG.md` | 更新日志 |
+
+**改动内容：**
+
+- **纸质手帐风桌面系统 UI：** 全新首页，严格遵循纸质桌面布局规则
+  - 左侧：固定纸质标签导航（今天/常用/记录/工具箱/收纳盒）
+  - 顶部：纸条式搜索栏
+  - 中央：最大的"当前生活状态"卡片（回形针+纸胶带装饰）
+  - 周围：8 张浮动工具卡（绝对定位 + -2°~+2° 旋转 + 不同 z-index）
+  - 底部：抽屉式收纳区（视觉弱化）
+  - 移动端：问候语 + 搜索条 + 生活卡 + 工具列表 + 收纳区 + 底部导航
+
+- **视觉风格：**
+  - 纸张纹理（CSS repeating-gradient 纤维感）
+  - 纸胶带装饰（褐色/绿色/蓝色三种变体）
+  - 回形针（大号用于生活卡，小号用于工具卡）
+  - 马善政手写体（Ma Shan Zheng Google Font）
+  - 柔和阴影（双层 desk-shadow）
+  - 禁止 grid 布局，全部 absolute/relative 定位
+
+- **工具卡前两位：** 格式转换（🔄）→ 现有模块 / 去除水印（✨）→ 重命名后的媒体净化模块
+- **其余 6 张占位：** 记录灵感 / 扫描纸张 / 清理图片 / 收纳文件 / 记录饮食 / 整理衣橱

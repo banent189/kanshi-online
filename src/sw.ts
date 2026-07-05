@@ -8,7 +8,6 @@ import { setCacheNameDetails } from 'workbox-core'
 setCacheNameDetails({ prefix: 'kanshi', suffix: 'v1', precache: 'precache', runtime: 'runtime' })
 
 // 这个变量会被 vite-plugin-pwa 替换为实际文件清单
-// @ts-expect-error
 precacheAndRoute(self.__WB_MANIFEST)
 
 // ── IndexedDB 工具 ──

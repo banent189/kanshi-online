@@ -1,6 +1,9 @@
+/* ── 日式手帐字体（必须最先导入） ── */
+@import url('https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
+
 @import "tailwindcss";
 
-/* 日式设计 Token */
+/* ── 设计 Token ── */
 :root {
   --ink: #2B4C7E;
   --washi: #F5F0E8;
@@ -10,7 +13,9 @@
   --gold: #C87D3F;
   --mist: #E8E0D5;
   --border: #D4C9B8;
-  --paper-shadow: rgba(43, 76, 126, 0.08);
+  --paper-shadow: rgba(43, 76, 126, 0.10);
+  --paper-shadow-strong: rgba(43, 76, 126, 0.16);
+  --handwriting: 'Ma Shan Zheng', cursive;
 }
 
 * {
@@ -30,7 +35,237 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* 水墨涟漪 */
+/* ── 纸张纹理（很淡的纤维感） ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 99999;
+  opacity: 0.35;
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 1px,
+      rgba(139, 69, 19, 0.03) 1px,
+      rgba(139, 69, 19, 0.03) 2px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 2px,
+      rgba(139, 69, 19, 0.015) 2px,
+      rgba(139, 69, 19, 0.015) 3px
+    );
+  mix-blend-mode: multiply;
+}
+
+/* ── 手写体工具类 ── */
+.font-handwriting {
+  font-family: var(--handwriting);
+}
+
+/* ── 桌面卡片通用样式 ── */
+.desk-card {
+  background-color: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(2px);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  box-shadow:
+    0 4px 12px var(--paper-shadow),
+    0 8px 24px var(--paper-shadow);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.desk-card:hover {
+  box-shadow:
+    0 6px 18px var(--paper-shadow-strong),
+    0 12px 36px var(--paper-shadow-strong);
+}
+
+/* ── 纸胶带（顶部装饰条） ── */
+.washi-tape {
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-1deg);
+  width: 40%;
+  height: 14px;
+  border-radius: 2px;
+  opacity: 0.6;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(200, 125, 63, 0.25) 15%,
+    rgba(200, 125, 63, 0.4) 30%,
+    rgba(200, 125, 63, 0.2) 50%,
+    rgba(200, 125, 63, 0.4) 70%,
+    rgba(200, 125, 63, 0.15) 85%,
+    transparent 100%
+  );
+}
+
+.washi-tape::before,
+.washi-tape::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  width: 3px;
+  height: 100%;
+  background: rgba(139, 69, 19, 0.08);
+}
+
+.washi-tape::before { left: 0; border-radius: 2px 0 0 2px; }
+.washi-tape::after { right: 0; border-radius: 0 2px 2px 0; }
+
+/* 绿色纸胶带变体 */
+.washi-tape-green {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(107, 142, 112, 0.2) 15%,
+    rgba(107, 142, 112, 0.35) 30%,
+    rgba(107, 142, 112, 0.15) 50%,
+    rgba(107, 142, 112, 0.35) 70%,
+    rgba(107, 142, 112, 0.1) 85%,
+    transparent 100%
+  );
+}
+
+/* 蓝色纸胶带变体 */
+.washi-tape-blue {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(43, 76, 126, 0.15) 15%,
+    rgba(43, 76, 126, 0.3) 30%,
+    rgba(43, 76, 126, 0.1) 50%,
+    rgba(43, 76, 126, 0.3) 70%,
+    rgba(43, 76, 126, 0.08) 85%,
+    transparent 100%
+  );
+}
+
+/* ── 回形针 ── */
+.paper-clip {
+  position: absolute;
+  top: -4px;
+  right: 20px;
+  width: 16px;
+  height: 32px;
+  border: 2px solid rgba(139, 69, 19, 0.4);
+  border-radius: 0 0 8px 8px;
+  border-top: none;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.paper-clip::before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 6px;
+  height: 8px;
+  border: 2px solid rgba(139, 69, 19, 0.4);
+  border-radius: 3px 3px 0 0;
+  border-bottom: none;
+  background: transparent;
+}
+
+/* 回形针（小号）- 用于工具卡 */
+.paper-clip-sm {
+  position: absolute;
+  top: -3px;
+  right: 12px;
+  width: 12px;
+  height: 24px;
+  border: 1.5px solid rgba(139, 69, 19, 0.3);
+  border-radius: 0 0 6px 6px;
+  border-top: none;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.paper-clip-sm::before {
+  content: '';
+  position: absolute;
+  top: -3px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 6px;
+  border: 1.5px solid rgba(139, 69, 19, 0.3);
+  border-radius: 2px 2px 0 0;
+  border-bottom: none;
+}
+
+/* ── 折痕/撕裂边缘效果 ── */
+.tear-edge {
+  position: relative;
+}
+
+.tear-edge::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: repeating-linear-gradient(
+    90deg,
+    transparent,
+    transparent 3px,
+    rgba(139, 69, 19, 0.05) 3px,
+    rgba(139, 69, 19, 0.05) 4px
+  );
+  border-radius: 0 0 12px 12px;
+}
+
+/* ── 搜索纸条 ── */
+.search-strip {
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(4px);
+  border: 1.5px solid var(--border);
+  border-radius: 999px;
+  box-shadow:
+    0 2px 6px var(--paper-shadow),
+    0 4px 12px var(--paper-shadow);
+  transition: box-shadow 0.3s ease;
+}
+
+.search-strip:focus-within {
+  box-shadow:
+    0 4px 12px var(--paper-shadow-strong),
+    0 8px 24px var(--paper-shadow-strong);
+}
+
+/* ── 抽屉/收纳区 ── */
+.drawer-area {
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(212, 201, 184, 0.15) 40%,
+    rgba(212, 201, 184, 0.3) 100%
+  );
+  border-top: 2px solid var(--border);
+  box-shadow:
+    0 -4px 12px var(--paper-shadow);
+}
+
+.drawer-shelf {
+  border: 1.5px solid var(--border);
+  background: rgba(255, 255, 255, 0.35);
+  border-radius: 8px;
+  box-shadow:
+    inset 0 2px 4px rgba(0, 0, 0, 0.03),
+    0 2px 6px var(--paper-shadow);
+}
+
+/* ── 水墨涟漪 ── */
 @keyframes ripple {
   to { transform: scale(4); opacity: 0; }
 }
@@ -42,7 +277,7 @@ body {
   pointer-events: none;
 }
 
-/* 纸张飘落 */
+/* ── 纸张飘落 ── */
 @keyframes paper-fall {
   0% { transform: translateY(-40px) rotate(-3deg); opacity: 0; }
   60% { opacity: 1; }
@@ -52,7 +287,7 @@ body {
   animation: paper-fall 0.5s ease-out forwards;
 }
 
-/* 按钮弹性进入 */
+/* ── 按钮弹性进入 ── */
 @keyframes bounce-in {
   0% { transform: scale(0.8); opacity: 0; }
   50% { transform: scale(1.05); }
@@ -62,7 +297,7 @@ body {
   animation: bounce-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
 
-/* 淡入 */
+/* ── 淡入 ── */
 @keyframes fade-in {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
@@ -71,13 +306,28 @@ body {
   animation: fade-in 0.4s ease-out forwards;
 }
 
-/* 纸鹤振翅 */
+/* ── 纸鹤振翅 ── */
 @keyframes flap {
   0%, 100% { transform: scaleY(1); }
   50% { transform: scaleY(0.6); }
 }
 
-/* 滚动条 */
+/* ── 纸张卡片入场（逐个飘入） ── */
+@keyframes card-in {
+  0% { opacity: 0; transform: translateY(20px) rotate(var(--r, 0deg)) scale(0.95); }
+  100% { opacity: 1; transform: translateY(0) rotate(var(--r, 0deg)) scale(1); }
+}
+
+/* ── 滚动条 ── */
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+/* ── 响应式 ── */
+@media (max-width: 768px) {
+  .desktop-only { display: none; }
+}
+
+@media (min-width: 769px) {
+  .mobile-only { display: none; }
+}

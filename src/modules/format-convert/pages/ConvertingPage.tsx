@@ -31,7 +31,7 @@ export default function ConvertingPage() {
 
   const resultRef = useRef<{ blob: Blob; fileName: string } | null>(null)
   const inputRef = useRef<HTMLInputElement>(null)
-  const timerRef = useRef<ReturnType<typeof setTimeout>>()
+  const timerRef = useRef<ReturnType<typeof setTimeout>>(undefined)
   const fileExtRef = useRef('')
 
   const formatInfo = FORMATS.find(f => f.key === state?.format)
@@ -299,7 +299,7 @@ export default function ConvertingPage() {
               </div>
             </motion.div>
 
-            {/* ── 微信：预览 + 指引 ── */}
+            {/* ── 微信：打开并转发（用下载操作触发微信打开） ── */}
             {env === 'wechat' && previewUrl ? (
               <motion.div
                 className="w-full max-w-xs"
@@ -307,31 +307,19 @@ export default function ConvertingPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.35, duration: 0.3 }}
               >
-                {resultRef.current?.blob.type.startsWith('image/') ? (
-                  <div className="rounded-xl overflow-hidden border-2 border-[var(--border)] bg-white/60 mb-3">
-                    <img
-                      src={previewUrl}
-                      className="w-full h-auto max-h-80 object-contain cursor-pointer"
-                      alt="预览"
-                      onClick={() => window.open(previewUrl, '_blank')}
-                    />
-                  </div>
-                ) : (
-                  <motion.button
-                    className="w-full py-4 rounded-xl font-medium text-lg shadow-lg
-                      flex items-center justify-center gap-2 mb-3"
-                    style={{ backgroundColor: 'var(--ink)', color: '#fff' }}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.96 }}
-                    onClick={() => window.open(previewUrl, '_blank')}
-                  >
-                    📄 预览 {formatInfo?.label || 'PDF'}
-                  </motion.button>
-                )}
-                <div className="px-4 py-3 rounded-xl bg-white/50 border border-[var(--border)] text-center">
+                <motion.button
+                  className="w-full py-4 rounded-xl font-medium text-lg shadow-lg
+                    flex items-center justify-center gap-2"
+                  style={{ backgroundColor: 'var(--ink)', color: '#fff' }}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.96 }}
+                  onClick={handleSave}
+                >
+                  打开并转发
+                </motion.button>
+                <div className="px-4 py-3 rounded-xl bg-white/50 border border-[var(--border)] text-center mt-3">
                   <p className="text-xs font-medium" style={{ color: 'var(--ink)' }}>
-                    👆 预览后点右上角「···」<br />
-                    即可发送给朋友
+                    打开之后右上角选择转发好友
                   </p>
                 </div>
               </motion.div>
@@ -350,14 +338,19 @@ export default function ConvertingPage() {
                 onClick={handlePrimaryAction}
               >
                 {env === 'desktop' ? (
-                  '💾 保存下载'
+                  '保存下载'
                 ) : (
                   shareLoading ? (
                     <>
-                      <motion.span animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}>⏳</motion.span>
+                      <motion.span animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}>
+                        <svg className="w-4 h-4 inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <circle cx="12" cy="12" r="10" />
+                          <path d="M12 6v6l4 2" />
+                        </svg>
+                      </motion.span>
                       准备分享...
                     </>
-                  ) : '📤 分享给好友'
+                  ) : '分享给好友'
                 )}
               </motion.button>
             )}
@@ -371,14 +364,14 @@ export default function ConvertingPage() {
                 transition={{ delay: 0.5, duration: 0.3 }}
               >
                 <p className="text-xs text-center" style={{ color: 'var(--ink-light)' }}>
-                  💡 桌面端暂不支持直接分享<br />
+                  桌面端暂不支持直接分享<br />
                   保存后拖入微信窗口即可发送给好友
                 </p>
               </motion.div>
             )}
 
-            {/* ── 保存（非桌面环境显示） ── */}
-            {env !== 'desktop' && (
+            {/* ── 保存（手机端显示） ── */}
+            {env === 'normal' && (
               <motion.button
                 className="w-full max-w-xs py-3 rounded-xl font-medium border-2 mt-3
                   flex items-center justify-center gap-2"
@@ -390,7 +383,7 @@ export default function ConvertingPage() {
                 whileTap={{ scale: 0.96 }}
                 onClick={handleSave}
               >
-                💾 保存
+                保存
               </motion.button>
             )}
 

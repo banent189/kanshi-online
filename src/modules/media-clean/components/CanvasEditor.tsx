@@ -26,7 +26,6 @@ export default function CanvasEditor({ imageBitmap, selection, onSelection }: Pr
     // 适配容器宽度
     const container = containerRef.current
     const maxW = container ? container.clientWidth : width
-    const maxH = 60 // vh approx — use window
     const winH = window.innerHeight * 0.6
     const scale = Math.min(maxW / width, winH / height, 1)
     scaleRef.current = scale

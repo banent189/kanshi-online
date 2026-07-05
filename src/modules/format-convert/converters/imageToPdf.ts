@@ -64,7 +64,7 @@ export async function imagesToPdf(
   })
 
   const pdfBytes = await pdfDoc.save()
-  return new Blob([pdfBytes], { type: 'application/pdf' })
+  return new Blob([pdfBytes.slice()], { type: 'application/pdf' })
 }
 
 async function webpToJpeg(file: File): Promise<ArrayBuffer> {
