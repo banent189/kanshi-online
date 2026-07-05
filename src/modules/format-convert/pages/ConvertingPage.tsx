@@ -27,7 +27,7 @@ export default function ConvertingPage() {
   const [customName, setCustomName] = useState('')
   const [shareLoading, setShareLoading] = useState(false)
   const [failBar, setFailBar] = useState(false)
-  const [weChatDownloaded, setWeChatDownloaded] = useState(false)
+  const [previewUrl, setPreviewUrl] = useState('')
 
   const resultRef = useRef<{ blob: Blob; fileName: string } | null>(null)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -51,7 +51,10 @@ export default function ConvertingPage() {
     }
     setCustomName(state.fileName)
     doConvert()
-    return () => { if (timerRef.current) clearTimeout(timerRef.current) }
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current)
+      if (previewUrl) URL.revokeObjectURL(previewUrl)
+    }
   }, [])
 
   useEffect(() => {
@@ -79,6 +82,10 @@ export default function ConvertingPage() {
       // 保留用户在 ConvertPage 设置的名字，否则用结果文件名
       setCustomName(state.fileName || result.fileName.replace(/\.[^/.]+$/, ''))
 
+      // 创建预览 URL（用于微信/显示图片）
+      const url = URL.createObjectURL(result.blob)
+      setPreviewUrl(url)
+
       setProgress({ current: 1, total: 1, message: '转换完成' })
       timerRef.current = setTimeout(() => setPhase('done'), 450)
     } catch (err) {
@@ -94,10 +101,8 @@ export default function ConvertingPage() {
     const finalName = customName + fileExtRef.current
 
     if (env === 'wechat') {
-      if (weChatDownloaded) return // 已下载过
-      // 微信内置浏览器：直接下载 → 去微信「我→文件」转发
-      downloadFile(r.blob, finalName)
-      setWeChatDownloaded(true)
+      // 微信内置浏览器：自动打开预览，用户用右上角「···」转发
+      if (previewUrl) window.open(previewUrl, '_blank')
       return
     }
 
@@ -294,38 +299,70 @@ export default function ConvertingPage() {
               </div>
             </motion.div>
 
-            {/* ── 主要操作 ── */}
-            <motion.button
-              className="w-full max-w-xs py-4 rounded-xl font-medium text-lg shadow-lg
-                flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-              style={{ backgroundColor: 'var(--ink)', color: '#fff' }}
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.35, duration: 0.3 }}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.96 }}
-              disabled={shareLoading}
-              onClick={handlePrimaryAction}
-            >
-              {env === 'desktop' ? (
-                '💾 保存下载'
-              ) : env === 'wechat' ? (
-                weChatDownloaded ? (
-                  '✅ 已下载'
+            {/* ── 微信：预览 + 指引 ── */}
+            {env === 'wechat' && previewUrl ? (
+              <motion.div
+                className="w-full max-w-xs"
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.35, duration: 0.3 }}
+              >
+                {resultRef.current?.blob.type.startsWith('image/') ? (
+                  <div className="rounded-xl overflow-hidden border-2 border-[var(--border)] bg-white/60 mb-3">
+                    <img
+                      src={previewUrl}
+                      className="w-full h-auto max-h-80 object-contain cursor-pointer"
+                      alt="预览"
+                      onClick={() => window.open(previewUrl, '_blank')}
+                    />
+                  </div>
                 ) : (
+                  <motion.button
+                    className="w-full py-4 rounded-xl font-medium text-lg shadow-lg
+                      flex items-center justify-center gap-2 mb-3"
+                    style={{ backgroundColor: 'var(--ink)', color: '#fff' }}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.96 }}
+                    onClick={() => window.open(previewUrl, '_blank')}
+                  >
+                    📄 预览 {formatInfo?.label || 'PDF'}
+                  </motion.button>
+                )}
+                <div className="px-4 py-3 rounded-xl bg-white/50 border border-[var(--border)] text-center">
+                  <p className="text-xs font-medium" style={{ color: 'var(--ink)' }}>
+                    👆 预览后点右上角「···」<br />
+                    即可发送给朋友
+                  </p>
+                </div>
+              </motion.div>
+            ) : (
+              /* ── 桌面/手机标准按钮 ── */
+              <motion.button
+                className="w-full max-w-xs py-4 rounded-xl font-medium text-lg shadow-lg
+                  flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                style={{ backgroundColor: 'var(--ink)', color: '#fff' }}
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.35, duration: 0.3 }}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.96 }}
+                disabled={shareLoading}
+                onClick={handlePrimaryAction}
+              >
+                {env === 'desktop' ? (
                   '💾 保存下载'
-                )
-              ) : (
-                shareLoading ? (
-                  <>
-                    <motion.span animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}>⏳</motion.span>
-                    准备分享...
-                  </>
-                ) : '📤 分享给好友'
-              )}
-            </motion.button>
+                ) : (
+                  shareLoading ? (
+                    <>
+                      <motion.span animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}>⏳</motion.span>
+                      准备分享...
+                    </>
+                  ) : '📤 分享给好友'
+                )}
+              </motion.button>
+            )}
 
-            {/* ── 环境提示 ── */}
+            {/* ── 桌面提示 ── */}
             {env === 'desktop' && (
               <motion.div
                 className="max-w-xs mx-auto mt-3 px-4 py-2.5 rounded-xl bg-white/50 border border-[var(--border)]"
@@ -339,37 +376,8 @@ export default function ConvertingPage() {
                 </p>
               </motion.div>
             )}
-            {env === 'wechat' && !weChatDownloaded && (
-              <motion.div
-                className="max-w-xs mx-auto mt-3 px-4 py-2.5 rounded-xl bg-white/50 border border-[var(--border)]"
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5, duration: 0.3 }}
-              >
-                <p className="text-xs text-center" style={{ color: 'var(--ink-light)' }}>
-                  💡 点击「保存下载」后<br />
-                  去微信「我 → 文件」即可转发给好友
-                </p>
-              </motion.div>
-            )}
-            {env === 'wechat' && weChatDownloaded && (
-              <motion.div
-                className="max-w-xs mx-auto mt-3 px-4 py-3 rounded-xl bg-white/60 border-2 border-[var(--border)]"
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ type: 'spring', stiffness: 200, damping: 15 }}
-              >
-                <p className="text-xs text-center font-medium" style={{ color: 'var(--ink)' }}>
-                  ✅ 文件已下载
-                </p>
-                <p className="text-xs text-center mt-1.5" style={{ color: 'var(--ink-light)' }}>
-                  打开微信 → 我 → 文件<br />
-                  找到文件即可转发给好友
-                </p>
-              </motion.div>
-            )}
 
-            {/* ── 保存（微信/手机环境显示为次要按钮） ── */}
+            {/* ── 保存（非桌面环境显示） ── */}
             {env !== 'desktop' && (
               <motion.button
                 className="w-full max-w-xs py-3 rounded-xl font-medium border-2 mt-3
@@ -425,7 +433,7 @@ export default function ConvertingPage() {
                 className="shrink-0 px-3 py-1.5 rounded-lg text-xs font-medium"
                 style={{ backgroundColor: 'var(--ink)', color: '#fff' }}
                 whileTap={{ scale: 0.95 }}
-                onClick={(e) => { e.stopPropagation(); setFailBar(false); handleShare() }}
+                onClick={(e) => { e.stopPropagation(); setFailBar(false); handlePrimaryAction() }}
               >
                 重试
               </motion.button>
