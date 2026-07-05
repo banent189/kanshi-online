@@ -11,8 +11,11 @@ export default defineConfig({
     react(),
     tailwindcss(),
     VitePWA({
+      strategies: 'injectManifest',
+      srcDir: 'src',
+      filename: 'sw.ts',
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.svg'],
+      includeAssets: ['favicon.svg', 'icon-512.png', 'icon-192.png', 'icon-180.png'],
       manifest: {
         name: '簡紙 Kanshi',
         short_name: '簡紙',
@@ -24,14 +27,19 @@ export default defineConfig({
         scope: '/',
         icons: [
           {
-            src: 'icon.svg',
-            sizes: '512x512',
-            type: 'image/svg+xml',
+            src: 'icon-192.png',
+            sizes: '192x192',
+            type: 'image/png',
           },
           {
-            src: 'icon.svg',
+            src: 'icon-512.png',
+            sizes: '512x512',
+            type: 'image/png',
+          },
+          {
+            src: 'icon-180.png',
             sizes: '180x180',
-            type: 'image/svg+xml',
+            type: 'image/png',
             purpose: 'any maskable',
           },
         ],
@@ -49,35 +57,11 @@ export default defineConfig({
                 accept: [
                   'image/*',
                   'application/pdf',
-                  'application/msword',
-                  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-                  'application/vnd.ms-excel',
-                  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                  'application/vnd.ms-powerpoint',
-                  'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-                  'text/plain',
                 ],
               },
             ],
           },
         } as any, // TypeScript的类型定义暂未完全覆盖share_target的files参数
-      },
-      workbox: {
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
-        navigateFallback: '/',
-        runtimeCaching: [
-          {
-            urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
-            handler: 'CacheFirst',
-            options: {
-              cacheName: 'google-fonts-cache',
-              expiration: {
-                maxEntries: 10,
-                maxAgeSeconds: 60 * 60 * 24 * 365,
-              },
-            },
-          },
-        ],
       },
     }),
   ],

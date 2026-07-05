@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation, useSearchParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import Logo from '../../../shared/components/Logo'
 import FormatPicker from '../../../shared/components/FormatPicker'
@@ -7,6 +7,7 @@ import type { FileItem, OutputFormat } from '../../../shared/utils/fileHelper'
 import { FORMATS } from '../../../shared/utils/fileHelper'
 import { canConvert, getUnsupportedReason } from '../converters'
 import { isRunningStandalone } from '../../../shared/utils/share'
+import { consumeSharedFiles } from '../../../shared/utils/getSharedFiles'
 
 interface ConvertState {
   files: FileItem[]
@@ -17,6 +18,7 @@ interface ConvertState {
 export default function ConvertPage() {
   const navigate = useNavigate()
   const location = useLocation()
+  const [searchParams] = useSearchParams()
   const state = location.state as ConvertState | null
 
   const [files, setFiles] = useState<FileItem[]>([])
@@ -24,7 +26,7 @@ export default function ConvertPage() {
   const [customName, setCustomName] = useState('')
   const launchQueueSet = useRef(false)
 
-  // ====== 接收外部导入的文件（share_target / launchQueue） ======
+  // ====== 接收外部导入的文件（share_target / launchQueue / IndexedDB） ======
   useEffect(() => {
     if (state?.files && state.files.length > 0) {
       setFiles(state.files)
@@ -33,6 +35,12 @@ export default function ConvertPage() {
       return
     }
     tryAutoImport()
+    // iOS 路径：Service Worker 拦截 POST 后存入 IndexedDB
+    if (searchParams.get('shared') === '1') {
+      tryConsumeIndexedDB()
+      // 清理 URL 参数
+      navigate('/convert', { replace: true })
+    }
   }, [])
 
   // 更新文件名默认值
@@ -63,6 +71,24 @@ export default function ConvertPage() {
       }
     } catch {
       // launchQueue 不可用（非 PWA 环境）
+    }
+  }
+
+  /** 从 IndexedDB 读取分享文件（iOS 路径：SW 拦截 POST 后存储） */
+  async function tryConsumeIndexedDB() {
+    try {
+      const files = await consumeSharedFiles()
+      if (files.length === 0) return
+      const items: FileItem[] = files.map((f, i) => ({
+        id: `shared-idb-${Date.now()}-${i}`,
+        file: f,
+        name: f.name,
+        size: f.size,
+        type: f.type,
+      }))
+      setFiles(items)
+    } catch {
+      // 没有分享文件
     }
   }
 
