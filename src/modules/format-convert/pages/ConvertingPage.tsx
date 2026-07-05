@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { convert, type ConvertProgress } from '../converters'
 import type { OutputFormat } from '../../../shared/utils/fileHelper'
 import { FORMATS, formatFileSize } from '../../../shared/utils/fileHelper'
-import { shareFile, downloadFile, previewFileInWeChat, isDesktop, isWeChatBrowser, type ShareResult } from '../../../shared/utils/share'
+import { shareFile, downloadFile, isDesktop, isWeChatBrowser, type ShareResult } from '../../../shared/utils/share'
 
 interface ConvertState {
   files: File[]
@@ -27,6 +27,7 @@ export default function ConvertingPage() {
   const [customName, setCustomName] = useState('')
   const [shareLoading, setShareLoading] = useState(false)
   const [failBar, setFailBar] = useState(false)
+  const [weChatDownloaded, setWeChatDownloaded] = useState(false)
 
   const resultRef = useRef<{ blob: Blob; fileName: string } | null>(null)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -93,8 +94,10 @@ export default function ConvertingPage() {
     const finalName = customName + fileExtRef.current
 
     if (env === 'wechat') {
-      // 微信内置浏览器：用预览文件代替分享
-      previewFileInWeChat(r.blob, finalName)
+      if (weChatDownloaded) return // 已下载过
+      // 微信内置浏览器：直接下载 → 去微信「我→文件」转发
+      downloadFile(r.blob, finalName)
+      setWeChatDownloaded(true)
       return
     }
 
@@ -307,12 +310,11 @@ export default function ConvertingPage() {
               {env === 'desktop' ? (
                 '💾 保存下载'
               ) : env === 'wechat' ? (
-                shareLoading ? (
-                  <>
-                    <motion.span animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}>⏳</motion.span>
-                    准备中...
-                  </>
-                ) : '📤 发送给好友'
+                weChatDownloaded ? (
+                  '✅ 已下载'
+                ) : (
+                  '💾 保存下载'
+                )
               ) : (
                 shareLoading ? (
                   <>
@@ -337,7 +339,7 @@ export default function ConvertingPage() {
                 </p>
               </motion.div>
             )}
-            {env === 'wechat' && (
+            {env === 'wechat' && !weChatDownloaded && (
               <motion.div
                 className="max-w-xs mx-auto mt-3 px-4 py-2.5 rounded-xl bg-white/50 border border-[var(--border)]"
                 initial={{ opacity: 0, y: 8 }}
@@ -345,8 +347,24 @@ export default function ConvertingPage() {
                 transition={{ delay: 0.5, duration: 0.3 }}
               >
                 <p className="text-xs text-center" style={{ color: 'var(--ink-light)' }}>
-                  💡 文件将在微信中打开<br />
-                  点击右上角「···」即可发送给朋友
+                  💡 点击「保存下载」后<br />
+                  去微信「我 → 文件」即可转发给好友
+                </p>
+              </motion.div>
+            )}
+            {env === 'wechat' && weChatDownloaded && (
+              <motion.div
+                className="max-w-xs mx-auto mt-3 px-4 py-3 rounded-xl bg-white/60 border-2 border-[var(--border)]"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ type: 'spring', stiffness: 200, damping: 15 }}
+              >
+                <p className="text-xs text-center font-medium" style={{ color: 'var(--ink)' }}>
+                  ✅ 文件已下载
+                </p>
+                <p className="text-xs text-center mt-1.5" style={{ color: 'var(--ink-light)' }}>
+                  打开微信 → 我 → 文件<br />
+                  找到文件即可转发给好友
                 </p>
               </motion.div>
             )}

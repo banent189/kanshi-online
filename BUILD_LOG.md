@@ -89,3 +89,27 @@
 - **正常手机浏览器：** 保持「📤 分享给好友」不变，使用系统分享菜单
 - **新手指引：** ConvertPage 空态新增"从微信接收图片"指引卡片（仅未安装 PWA 时显示）
 - **launchQueue 稳健性：** 用 `useRef` 防止重复注册消费器
+
+## v6 — 2026-07-05 | iOS PWA 分享修复（PNG图标 + Service Worker 拦截）
+
+**修改文件：**
+
+| 文件 | 改动 |
+|------|------|
+| `index.html` | `apple-touch-icon` 改用 PNG 180×180；移除 SVG 引用 |
+| `vite.config.ts` | 新增 `strategies: injectManifest` + 自定义 SW；manifest 图标改为 PNG；移除 workbox 配置 |
+| `src/sw.ts` | **新增** 自定义 Service Worker：拦截 iOS share_target POST /convert，文件存 IndexedDB，重定向到页面 |
+| `src/shared/utils/getSharedFiles.ts` | **新增** 前端读取 IndexedDB 中分享文件的工具函数 |
+| `src/modules/format-convert/pages/ConvertPage.tsx` | 新增 IndexedDB 消费路径（iOS），支持 `?shared=1` URL 参数 |
+| `public/icon.svg` | **删除**（不再使用） |
+| `public/icons.svg` | **删除**（不再使用） |
+| `public/icon-{180,192,512}.png` | **新增** 从 SVG 生成的 PNG 图标 |
+| `BUILD_LOG.md` | 更新日志 |
+| `package.json` | 新增 sharp 依赖（图标生成） |
+
+**改动内容：**
+
+- **图标格式修复：** iOS 不识别 SVG 图标，PWA 无法注册到系统分享列表。全部改为 PNG（sharp 生成 180/192/512 三种尺寸）
+- **Service Worker POST 拦截：** iOS 通过 share_target 分享文件时发送 POST 到 `/convert`，自定义 SW 拦截后解析 FormData，存入 IndexedDB，再重定向到 `/convert?shared=1`
+- **双路径接收：** Android/Chrome 走 `launchQueue`，iOS 走 IndexedDB，统一在 ConvertPage 消费
+- **Google Fonts 缓存：** SW 中保留 CacheFirst 策略

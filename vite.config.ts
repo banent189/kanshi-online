@@ -15,7 +15,7 @@ export default defineConfig({
       srcDir: 'src',
       filename: 'sw.ts',
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.svg', 'icon-512.png', 'icon-192.png', 'icon-180.png'],
+      includeAssets: ['favicon.svg', 'icon-512.png', 'icon-192.png', 'icon-180.png', 'icon-120.png'],
       manifest: {
         name: '簡紙 Kanshi',
         short_name: '簡紙',
@@ -23,9 +23,21 @@ export default defineConfig({
         theme_color: '#2B4C7E',
         background_color: '#F5F0E8',
         display: 'standalone',
+        id: 'kanshi-online',
         start_url: '/',
         scope: '/',
+        lang: 'zh-CN',
         icons: [
+          {
+            src: 'icon-120.png',
+            sizes: '120x120',
+            type: 'image/png',
+          },
+          {
+            src: 'icon-180.png',
+            sizes: '180x180',
+            type: 'image/png',
+          },
           {
             src: 'icon-192.png',
             sizes: '192x192',
@@ -35,12 +47,6 @@ export default defineConfig({
             src: 'icon-512.png',
             sizes: '512x512',
             type: 'image/png',
-          },
-          {
-            src: 'icon-180.png',
-            sizes: '180x180',
-            type: 'image/png',
-            purpose: 'any maskable',
           },
         ],
         share_target: {
