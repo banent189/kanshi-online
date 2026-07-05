@@ -113,3 +113,19 @@
 - **Service Worker POST 拦截：** iOS 通过 share_target 分享文件时发送 POST 到 `/convert`，自定义 SW 拦截后解析 FormData，存入 IndexedDB，再重定向到 `/convert?shared=1`
 - **双路径接收：** Android/Chrome 走 `launchQueue`，iOS 走 IndexedDB，统一在 ConvertPage 消费
 - **Google Fonts 缓存：** SW 中保留 CacheFirst 策略
+
+## v7 — 2026-07-05 | 微信浏览器流程简化：自动预览 → 右上角转发
+
+**修改文件：**
+
+| 文件 | 改动 |
+|------|------|
+| `src/modules/format-convert/pages/ConvertingPage.tsx` | 微信环境：转换完自动预览文件，删除「分享好友」按钮；改为预览+保存 |
+| `BUILD_LOG.md` | 更新日志 |
+
+**改动内容：**
+
+- **微信内置浏览器流程重做：** 转换完成自动预览图片/PDF → 用户直接点右上角「···」即可发送给朋友，不再绕路
+- **删除「分享好友」按钮：** 微信里 `navigator.share()` 走不通，预览后用微信原生「···」菜单转发更自然
+- **fallback 修复：** `handleShare` 引用改为 `handlePrimaryAction`
+- **iOS PWA 分享修复搁置**（iOS 沙箱限制暂无法绕过）
