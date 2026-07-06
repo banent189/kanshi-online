@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>简纸 Konshi - 工具箱</title>
+  <link rel="stylesheet" href="styles/theme.css" />
+  <style>
+    :root {
+      --toolbox-header-height: calc(var(--space-4xl) + var(--space-xl));
+      --toolbox-note-height: calc(var(--space-6xl) + var(--space-4xl));
+      --toolbox-card-size: calc(var(--space-6xl) + var(--space-4xl));
+      --toolbox-icon-size: var(--space-5xl);
+      --toolbox-tab-line: calc(var(--space-4xl) + var(--space-md));
+    }
+
+    /* ── 带编辑链接的头部 ── */
+    .tools-header {
+      min-height: var(--toolbox-header-height);
+      display: grid;
+      grid-template-columns: var(--space-6xl) 1fr var(--space-6xl);
+      align-items: center;
+      padding: var(--space-lg) var(--page-padding-x) var(--space-md);
+    }
+
+    .tools-header .page-title {
+      grid-column: 2;
+    }
+
+    .edit-link {
+      grid-column: 3;
+      justify-self: end;
+      font-family: var(--font-family-display);
+      font-size: var(--font-size-body);
+      font-weight: var(--font-weight-medium);
+      color: var(--color-text-secondary);
+    }
+
+    /* ── 便签 ── */
+    .tools-note {
+      min-height: var(--toolbox-note-height);
+    }
+
+    .branch-left {
+      position: absolute;
+      left: var(--space-lg);
+      bottom: var(--space-lg);
+      transform: rotate(-14deg);
+    }
+
+    .branch-right {
+      position: absolute;
+      right: var(--space-lg);
+      top: var(--space-md);
+      transform: rotate(12deg);
+    }
+
+    /* ── 分类标签 ── */
+    .category-tabs {
+      margin-bottom: var(--space-lg);
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .category-tabs::-webkit-scrollbar {
+      display: none;
+    }
+
+    .category-list {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(72px, 1fr));
+      gap: var(--space-sm);
+    }
+
+    .category-btn {
+      position: relative;
+      width: 100%;
+      padding: var(--space-sm) var(--space-xs);
+      font-family: var(--font-family-display);
+      font-size: var(--font-size-body);
+      font-weight: var(--font-weight-medium);
+      color: var(--color-text-tertiary);
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .category-btn[aria-selected="true"] {
+      color: var(--color-text-primary);
+      font-weight: var(--font-weight-bold);
+    }
+
+    .category-btn[aria-selected="true"]::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      bottom: 0;
+      width: var(--toolbox-tab-line);
+      height: var(--space-2xs);
+      background: var(--color-primary);
+      border-radius: var(--radius-pill);
+      transform: translateX(-50%);
+    }
+
+    /* ── 工具网格 ── */
+    .tools-section {
+      margin-top: var(--section-gap);
+    }
+
+    .toolbox-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--card-gap);
+    }
+
+    .toolbox-card {
+      min-height: var(--toolbox-card-size);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-sm);
+      padding: var(--space-md) var(--space-xs);
+      background: var(--color-bg-surface);
+      border: var(--border-paper);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-paper);
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      transition: transform 0.15s;
+    }
+
+    .toolbox-card:active {
+      transform: scale(0.96);
+    }
+
+    .toolbox-card .tool-icon {
+      width: var(--toolbox-icon-size);
+      height: var(--toolbox-icon-size);
+      background: var(--color-bg-paper);
+    }
+
+    /* 各卡片颜色变体 */
+    .toolbox-card:nth-child(1) .tool-icon { background: var(--color-bg-muted); }
+    .toolbox-card:nth-child(2) .tool-icon,
+    .toolbox-card:nth-child(5) .tool-icon { color: var(--color-warning); }
+    .toolbox-card:nth-child(3) .tool-icon { color: var(--color-info); }
+    .toolbox-card:nth-child(4) .tool-icon { color: var(--color-text-secondary); }
+    .toolbox-card:nth-child(6) .tool-icon { background: var(--color-card-blue); }
+    .toolbox-card:nth-child(7) .tool-icon,
+    .toolbox-card:nth-child(10) .tool-icon { color: var(--color-primary); }
+  </style>
+</head>
+<body>
+  <div class="screen">
+    <!-- 状态栏 -->
+    <div class="status-bar" aria-label="手机状态栏">
+      <span class="status-left">9:41</span>
+      <span class="status-icons" aria-hidden="true">
+        <span class="signal-bars" aria-label="信号">
+          <span class="bar" style="height:6px"></span>
+          <span class="bar" style="height:9px"></span>
+          <span class="bar" style="height:12px"></span>
+          <span class="bar" style="height:15px"></span>
+        </span>
+        <span class="wifi-icon">⌁</span>
+        <span class="battery-icon"><span class="battery-fill"></span></span>
+      </span>
+    </div>
+
+    <header class="tools-header">
+      <h1 class="page-title">工具箱</h1>
+      <a class="edit-link" href="#" aria-label="编辑工具箱">编辑</a>
+    </header>
+
+    <main class="page-main">
+      <!-- 便签 -->
+      <section class="paper-note tools-note" aria-labelledby="tools-note">
+        <p id="tools-note" class="note-text">
+          各种实用小工具<br />
+          让生活更便捷
+        </p>
+        <span class="branch-deco branch-left" aria-hidden="true">⌁</span>
+        <span class="branch-deco branch-right" aria-hidden="true">⌁</span>
+      </section>
+
+      <!-- 分类标签 -->
+      <nav class="category-tabs" aria-label="工具分类">
+        <ul class="category-list" role="tablist">
+          <li role="presentation"><button class="category-btn" type="button" role="tab" aria-selected="true">全部</button></li>
+          <li role="presentation"><button class="category-btn" type="button" role="tab" aria-selected="false">图片</button></li>
+          <li role="presentation"><button class="category-btn" type="button" role="tab" aria-selected="false">文档</button></li>
+          <li role="presentation"><button class="category-btn" type="button" role="tab" aria-selected="false">计算</button></li>
+          <li role="presentation"><button class="category-btn" type="button" role="tab" aria-selected="false">其他</button></li>
+        </ul>
+      </nav>
+
+      <!-- 工具列表 -->
+      <section class="tools-section" aria-label="工具列表">
+        <div class="toolbox-grid">
+          <article class="toolbox-card" onclick="location.href='tools.html'">
+            <div class="tool-icon" aria-hidden="true">▤</div>
+            <h2 class="tool-card-title">扫描卡片</h2>
+          </article>
+          <article class="toolbox-card" onclick="location.href='tools/img-to-pdf.html'">
+            <div class="tool-icon" aria-hidden="true">▧</div>
+            <h2 class="tool-card-title">图片转PDF</h2>
+          </article>
+          <article class="toolbox-card" onclick="location.href='tools.html'">
+            <div class="tool-icon" aria-hidden="true">💧</div>
+            <h2 class="tool-card-title">去水印</h2>
+          </article>
+          <article class="toolbox-card" onclick="location.href='tools.html'">
+            <div class="tool-icon" aria-hidden="true">⌗</div>
+            <h2 class="tool-card-title">文字识别</h2>
+          </article>
+          <article class="toolbox-card" onclick="location.href='tools.html'">
+            <div class="tool-icon" aria-hidden="true">PDF</div>
+            <h2 class="tool-card-title">PDF 工具</h2>
+          </article>
+          <article class="toolbox-card" onclick="location.href='storage.html'">
+            <div class="tool-icon" aria-hidden="true">🗂</div>
+            <h2 class="tool-card-title">移入收纳</h2>
+          </article>
+          <article class="toolbox-card" onclick="location.href='tools.html'">
+            <div class="tool-icon" aria-hidden="true">⏱</div>
+            <h2 class="tool-card-title">计时器</h2>
+          </article>
+          <article class="toolbox-card" onclick="location.href='tools.html'">
+            <div class="tool-icon" aria-hidden="true">▥</div>
+            <h2 class="tool-card-title">计算器</h2>
+          </article>
+          <article class="toolbox-card" onclick="location.href='tools.html'">
+            <div class="tool-icon" aria-hidden="true">▦</div>
+            <h2 class="tool-card-title">单格拼图</h2>
+          </article>
+          <article class="toolbox-card" onclick="location.href='tools.html'">
+            <div class="tool-icon" aria-hidden="true">▦</div>
+            <h2 class="tool-card-title">二维码生成</h2>
+          </article>
+          <article class="toolbox-card" onclick="location.href='records.html'">
+            <div class="tool-icon" aria-hidden="true">✺</div>
+            <h2 class="tool-card-title">记录本</h2>
+          </article>
+          <article class="toolbox-card" onclick="location.href='tools.html'">
+            <div class="tool-icon" aria-hidden="true">▢</div>
+            <h2 class="tool-card-title">更多工具</h2>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <!-- 底部导航 -->
+    <footer class="bottom-nav" aria-label="底部导航">
+      <a href="index.html">
+        <span class="nav-icon" aria-hidden="true">⌂</span>
+        <span>今天</span>
+      </a>
+      <a href="todo.html">
+        <span class="nav-icon" aria-hidden="true">☆</span>
+        <span>待办</span>
+      </a>
+      <a href="records.html">
+        <span class="nav-icon" aria-hidden="true">▦</span>
+        <span>记录</span>
+      </a>
+      <a href="tools.html" aria-current="page">
+        <span class="nav-icon" aria-hidden="true">▣</span>
+        <span>工具箱</span>
+      </a>
+      <a href="storage.html">
+        <span class="nav-icon" aria-hidden="true">▱</span>
+        <span>收纳盒</span>
+      </a>
+    </footer>
+  </div>
+
+  <script>
+    // 分类标签切换
+    document.querySelectorAll('.category-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.category-btn').forEach(b => b.setAttribute('aria-selected', 'false'));
+        this.setAttribute('aria-selected', 'true');
+      });
+    });
+  </script>
+</body>
+</html>

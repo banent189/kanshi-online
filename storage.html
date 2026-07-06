@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>简纸 Konshi - 收纳盒</title>
+  <link rel="stylesheet" href="styles/theme.css" />
+  <style>
+    :root {
+      --storage-header-height: calc(var(--space-4xl) + var(--space-xl));
+      --storage-note-height: calc(var(--space-6xl) + var(--space-4xl));
+      --storage-card-height: calc(var(--space-6xl) + var(--space-xl));
+      --storage-icon-size: var(--space-5xl);
+      --storage-add-height: var(--space-6xl);
+    }
+
+    /* ── 带编辑链接的头部 ── */
+    .storage-header {
+      min-height: var(--storage-header-height);
+      display: grid;
+      grid-template-columns: var(--space-6xl) 1fr var(--space-6xl);
+      align-items: center;
+      padding: var(--space-lg) var(--page-padding-x) var(--space-md);
+    }
+
+    .storage-header .page-title {
+      grid-column: 2;
+    }
+
+    .edit-link {
+      grid-column: 3;
+      justify-self: end;
+      font-family: var(--font-family-display);
+      font-size: var(--font-size-body);
+      font-weight: var(--font-weight-medium);
+      color: var(--color-text-secondary);
+    }
+
+    /* ── 便签 ── */
+    .storage-note {
+      min-height: var(--storage-note-height);
+    }
+
+    .storage-note::after {
+      content: "";
+      position: absolute;
+      top: calc(var(--space-lg) * -1);
+      right: var(--space-xl);
+      width: var(--space-2xl);
+      height: var(--space-5xl);
+      border: var(--border-paper-strong);
+      border-radius: var(--radius-pill);
+      transform: rotate(var(--space-sm));
+      opacity: var(--opacity-muted);
+      box-shadow: var(--shadow-xs);
+    }
+
+    .branch-left {
+      position: absolute;
+      left: var(--space-lg);
+      bottom: var(--space-lg);
+      font-size: var(--font-size-2xl);
+      color: var(--color-success);
+      opacity: var(--opacity-muted);
+    }
+
+    /* ── 收纳盒列表 ── */
+    .box-list {
+      display: grid;
+      gap: var(--space-md);
+    }
+
+    .box-card {
+      position: relative;
+      min-height: var(--storage-card-height);
+      display: grid;
+      grid-template-columns: var(--storage-icon-size) 1fr;
+      align-items: center;
+      gap: var(--space-lg);
+      padding: var(--space-md) var(--space-xl);
+      background: var(--color-bg-surface);
+      border: var(--border-paper);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-paper);
+      overflow: hidden;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .box-card:active {
+      transform: scale(0.98);
+    }
+
+    /* 层叠卡片装饰 */
+    .box-card::before,
+    .box-card::after {
+      content: "";
+      position: absolute;
+      top: var(--space-sm);
+      bottom: var(--space-sm);
+      width: var(--space-xl);
+      background: var(--color-bg-paper);
+      border: var(--border-paper);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-xs);
+    }
+
+    .box-card::before {
+      right: var(--space-md);
+      opacity: var(--paper-edge-opacity);
+    }
+
+    .box-card::after {
+      right: var(--space-2xs);
+      opacity: 0.12;
+    }
+
+    .folder-icon {
+      position: relative;
+      z-index: 2;
+      width: var(--storage-icon-size);
+      height: var(--storage-icon-size);
+      display: grid;
+      place-items: center;
+      background: var(--color-card-yellow);
+      border: var(--border-paper-strong);
+      border-radius: var(--radius-sm);
+      color: var(--color-primary-dark);
+      box-shadow: var(--shadow-sm);
+      font-size: var(--font-size-xl);
+    }
+
+    .folder-icon::before {
+      content: "";
+      position: absolute;
+      top: calc(var(--space-xs) * -1);
+      left: var(--space-xs);
+      width: var(--space-2xl);
+      height: var(--space-lg);
+      background: var(--color-card-yellow);
+      border: var(--border-paper-strong);
+      border-bottom: 0;
+      border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+    }
+
+    .folder-icon span {
+      position: relative;
+      z-index: 1;
+    }
+
+    .box-content {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      gap: var(--space-2xs);
+    }
+
+    .box-title {
+      margin: 0;
+      font-family: var(--font-family-display);
+      font-size: var(--font-size-h3);
+      font-weight: var(--font-weight-bold);
+      line-height: var(--line-height-tight);
+      color: var(--color-text-primary);
+    }
+
+    .box-count {
+      margin: 0;
+      font-family: var(--font-family-display);
+      font-size: var(--font-size-body);
+      font-weight: var(--font-weight-medium);
+      color: var(--color-text-secondary);
+    }
+
+    .box-deco {
+      position: absolute;
+      right: var(--space-4xl);
+      bottom: var(--space-sm);
+      z-index: 2;
+      font-size: var(--font-size-2xl);
+      color: var(--color-success);
+      opacity: var(--opacity-muted);
+    }
+
+    /* ── 创建按钮 ── */
+    .create-box {
+      width: 100%;
+      min-height: var(--storage-add-height);
+      margin-top: var(--space-xl);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-md);
+      background: var(--color-bg-surface);
+      border: var(--border-dashed);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-xs);
+      color: var(--color-text-secondary);
+      font-family: var(--font-family-display);
+      font-size: var(--font-size-h3);
+      font-weight: var(--font-weight-semibold);
+    }
+  </style>
+</head>
+<body>
+  <div class="screen">
+    <!-- 状态栏 -->
+    <div class="status-bar" aria-label="手机状态栏">
+      <span class="status-left">9:41</span>
+      <span class="status-icons" aria-hidden="true">
+        <span class="signal-bars" aria-label="信号">
+          <span class="bar" style="height:6px"></span>
+          <span class="bar" style="height:9px"></span>
+          <span class="bar" style="height:12px"></span>
+          <span class="bar" style="height:15px"></span>
+        </span>
+        <span class="wifi-icon">⌁</span>
+        <span class="battery-icon"><span class="battery-fill"></span></span>
+      </span>
+    </div>
+
+    <header class="storage-header">
+      <h1 class="page-title">收纳盒</h1>
+      <a class="edit-link" href="#" aria-label="编辑收纳盒">编辑</a>
+    </header>
+
+    <main class="page-main">
+      <!-- 便签 -->
+      <section class="paper-note storage-note" aria-labelledby="storage-note">
+        <p id="storage-note" class="note-text">
+          把生活的碎片收纳在这里<br />
+          守护好每一份记忆。
+        </p>
+        <span class="branch-left" aria-hidden="true">⌁</span>
+      </section>
+
+      <!-- 收纳盒列表 -->
+      <section aria-label="收纳盒列表">
+        <ul class="box-list">
+          <li>
+            <article class="box-card">
+              <div class="folder-icon" aria-hidden="true"><span>▧</span></div>
+              <div class="box-content">
+                <h2 class="box-title">灵感碎片</h2>
+                <p class="box-count">12 条内容</p>
+              </div>
+              <span class="box-deco" aria-hidden="true">⌁</span>
+            </article>
+          </li>
+          <li>
+            <article class="box-card">
+              <div class="folder-icon" aria-hidden="true"><span>▣</span></div>
+              <div class="box-content">
+                <h2 class="box-title">密码本</h2>
+                <p class="box-count">6 条内容</p>
+              </div>
+              <span class="box-deco" aria-hidden="true">⌁</span>
+            </article>
+          </li>
+          <li>
+            <article class="box-card">
+              <div class="folder-icon" aria-hidden="true"><span>◷</span></div>
+              <div class="box-content">
+                <h2 class="box-title">历史记录</h2>
+                <p class="box-count">36 条内容</p>
+              </div>
+              <span class="box-deco" aria-hidden="true">⌁</span>
+            </article>
+          </li>
+          <li>
+            <article class="box-card">
+              <div class="folder-icon" aria-hidden="true"><span>▣</span></div>
+              <div class="box-content">
+                <h2 class="box-title">备忘录</h2>
+                <p class="box-count">8 条内容</p>
+              </div>
+              <span class="box-deco" aria-hidden="true">⌁</span>
+            </article>
+          </li>
+          <li>
+            <article class="box-card">
+              <div class="folder-icon" aria-hidden="true"><span>◷</span></div>
+              <div class="box-content">
+                <h2 class="box-title">历次汇总</h2>
+                <p class="box-count">36 条内容</p>
+              </div>
+              <span class="box-deco" aria-hidden="true">⌁</span>
+            </article>
+          </li>
+        </ul>
+
+        <button class="create-box" type="button" aria-label="创建收纳盒">
+          <span aria-hidden="true">＋</span>
+          <span>创建收纳盒</span>
+        </button>
+      </section>
+    </main>
+
+    <!-- 底部导航 -->
+    <footer class="bottom-nav" aria-label="底部导航">
+      <a href="index.html">
+        <span class="nav-icon" aria-hidden="true">⌂</span>
+        <span>今天</span>
+      </a>
+      <a href="todo.html">
+        <span class="nav-icon" aria-hidden="true">☆</span>
+        <span>待办</span>
+      </a>
+      <a href="records.html">
+        <span class="nav-icon" aria-hidden="true">▦</span>
+        <span>记录</span>
+      </a>
+      <a href="tools.html">
+        <span class="nav-icon" aria-hidden="true">▣</span>
+        <span>工具箱</span>
+      </a>
+      <a href="storage.html" aria-current="page">
+        <span class="nav-icon" aria-hidden="true">▱</span>
+        <span>收纳盒</span>
+      </a>
+    </footer>
+  </div>
+</body>
+</html>

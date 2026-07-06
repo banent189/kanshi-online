@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>简纸 Konshi - 图片转PDF</title>
+  <link rel="stylesheet" href="../styles/theme.css" />
+  <style>
+    /* ── 子页头部 ── */
+    .sub-header {
+      display: grid;
+      grid-template-columns: 48px 1fr 48px;
+      align-items: center;
+      padding: var(--space-lg) var(--page-padding-x) var(--space-md);
+      min-height: calc(var(--space-4xl) + var(--space-xl));
+    }
+
+    .back-btn {
+      width: 48px;
+      height: 48px;
+      display: grid;
+      place-items: center;
+      font-size: var(--font-size-2xl);
+      color: var(--color-text-secondary);
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .back-btn:active {
+      opacity: 0.6;
+    }
+
+    .sub-header .page-title {
+      grid-column: 2;
+    }
+
+    /* ── 拖拽上传区 ── */
+    .upload-area {
+      position: relative;
+      min-height: 200px;
+      display: grid;
+      place-items: center;
+      padding: var(--space-2xl) var(--space-xl);
+      margin-bottom: var(--space-xl);
+      background: var(--color-bg-surface);
+      border: var(--border-dashed);
+      border-radius: var(--radius-xl);
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      transition: background 0.2s;
+    }
+
+    .upload-area:active {
+      background: var(--color-bg-soft);
+    }
+
+    .upload-content {
+      display: grid;
+      place-items: center;
+      gap: var(--space-md);
+      text-align: center;
+    }
+
+    .upload-icon {
+      width: 72px;
+      height: 72px;
+      display: grid;
+      place-items: center;
+      background: var(--color-bg-paper);
+      border: var(--border-paper);
+      border-radius: var(--radius-pill);
+      font-size: var(--font-size-2xl);
+      color: var(--color-primary);
+      box-shadow: var(--shadow-xs);
+    }
+
+    .upload-text {
+      font-family: var(--font-family-display);
+      font-size: var(--font-size-h3);
+      font-weight: var(--font-weight-medium);
+      color: var(--color-text-primary);
+    }
+
+    .upload-hint {
+      font-family: var(--font-family-body);
+      font-size: var(--font-size-body);
+      color: var(--color-text-tertiary);
+    }
+
+    .upload-hint span {
+      display: inline-block;
+      padding: var(--space-2xs) var(--space-sm);
+      background: var(--color-bg-soft);
+      border-radius: var(--radius-pill);
+      margin: 0 var(--space-2xs);
+    }
+
+    /* ── 设置区 ── */
+    .settings-section {
+      margin-top: var(--space-xl);
+    }
+
+    .settings-section .section-title {
+      margin-bottom: var(--space-md);
+    }
+
+    .setting-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--space-md) var(--space-lg);
+      background: var(--color-bg-surface);
+      border: var(--border-paper);
+      border-radius: var(--radius-card);
+      margin-bottom: var(--space-sm);
+    }
+
+    .setting-label {
+      font-family: var(--font-family-display);
+      font-size: var(--font-size-body);
+      font-weight: var(--font-weight-medium);
+      color: var(--color-text-primary);
+    }
+
+    .setting-value {
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+      font-family: var(--font-family-ui);
+      font-size: var(--font-size-body);
+      color: var(--color-text-secondary);
+    }
+
+    .setting-value .arrow {
+      font-size: var(--font-size-xs);
+      color: var(--color-text-tertiary);
+    }
+
+    .setting-value .pill {
+      display: inline-block;
+      padding: var(--space-2xs) var(--space-sm);
+      background: var(--color-bg-soft);
+      border-radius: var(--radius-pill);
+      font-size: var(--font-size-sm);
+    }
+
+    /* ── 列出已选文件 ── */
+    .file-list {
+      display: grid;
+      gap: var(--space-sm);
+      margin-top: var(--space-xl);
+    }
+
+    .file-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      padding: var(--space-md) var(--space-lg);
+      background: var(--color-bg-surface);
+      border: var(--border-paper);
+      border-radius: var(--radius-card);
+    }
+
+    .file-thumb {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-sm);
+      background: var(--color-bg-muted);
+      display: grid;
+      place-items: center;
+      font-size: var(--font-size-lg);
+      color: var(--color-text-tertiary);
+      flex-shrink: 0;
+    }
+
+    .file-info {
+      flex: 1;
+      display: grid;
+      gap: var(--space-2xs);
+    }
+
+    .file-name {
+      font-family: var(--font-family-ui);
+      font-size: var(--font-size-body);
+      font-weight: var(--font-weight-medium);
+      color: var(--color-text-primary);
+    }
+
+    .file-size {
+      font-family: var(--font-family-ui);
+      font-size: var(--font-size-sm);
+      color: var(--color-text-tertiary);
+    }
+
+    .file-remove {
+      width: 32px;
+      height: 32px;
+      display: grid;
+      place-items: center;
+      color: var(--color-text-tertiary);
+      font-size: var(--font-size-lg);
+      flex-shrink: 0;
+    }
+
+    /* ── 转换按钮 ── */
+    .convert-btn {
+      width: 100%;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-sm);
+      margin-top: var(--space-xl);
+      background: var(--color-primary);
+      color: var(--color-white);
+      font-family: var(--font-family-display);
+      font-size: var(--font-size-h3);
+      font-weight: var(--font-weight-bold);
+      border-radius: var(--radius-btn);
+      box-shadow: var(--shadow-sm);
+      -webkit-tap-highlight-color: transparent;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+
+    .convert-btn:active {
+      transform: scale(0.97);
+      box-shadow: var(--shadow-xs);
+    }
+
+    /* ── 底部留白（无底部导航） ── */
+    .sub-page-main {
+      flex: 1;
+      padding: 0 var(--page-padding-x) var(--space-6xl);
+    }
+  </style>
+</head>
+<body>
+  <div class="screen">
+    <!-- 状态栏 -->
+    <div class="status-bar" aria-label="手机状态栏">
+      <span class="status-left">9:41</span>
+      <span class="status-icons" aria-hidden="true">
+        <span class="signal-bars" aria-label="信号">
+          <span class="bar" style="height:6px"></span>
+          <span class="bar" style="height:9px"></span>
+          <span class="bar" style="height:12px"></span>
+          <span class="bar" style="height:15px"></span>
+        </span>
+        <span class="wifi-icon">⌁</span>
+        <span class="battery-icon"><span class="battery-fill"></span></span>
+      </span>
+    </div>
+
+    <!-- 头部：返回 + 标题 -->
+    <header class="sub-header">
+      <a class="back-btn" href="../tools.html" aria-label="返回工具箱">‹</a>
+      <h1 class="page-title">图片转PDF</h1>
+      <span></span>
+    </header>
+
+    <main class="sub-page-main">
+      <!-- 上传区 -->
+      <section class="upload-area" aria-label="点击选择图片" onclick="document.getElementById('fileInput').click()">
+        <div class="upload-content">
+          <div class="upload-icon" aria-hidden="true">⌕</div>
+          <p class="upload-text">点击选择图片</p>
+          <p class="upload-hint">支持 <span>JPG</span> <span>PNG</span> <span>WebP</span></p>
+        </div>
+        <input id="fileInput" type="file" accept="image/*" multiple hidden />
+      </section>
+
+      <!-- 设置 -->
+      <section class="settings-section" aria-label="输出设置">
+        <h2 class="section-title">输出设置</h2>
+
+        <div class="setting-row">
+          <span class="setting-label">纸张大小</span>
+          <span class="setting-value">
+            A4 <span class="arrow">›</span>
+          </span>
+        </div>
+
+        <div class="setting-row">
+          <span class="setting-label">纸张方向</span>
+          <span class="setting-value">
+            <span class="pill">纵向</span>
+            <span class="arrow">›</span>
+          </span>
+        </div>
+
+        <div class="setting-row">
+          <span class="setting-label">页边距</span>
+          <span class="setting-value">
+            窄 <span class="arrow">›</span>
+          </span>
+        </div>
+
+        <div class="setting-row">
+          <span class="setting-label">文件名</span>
+          <span class="setting-value">
+            输出_2026-07-06 <span class="arrow">›</span>
+          </span>
+        </div>
+      </section>
+
+      <!-- 已选文件（示例） -->
+      <section class="file-list" aria-label="已选文件">
+        <div class="file-item">
+          <div class="file-thumb" aria-hidden="true">🖼</div>
+          <div class="file-info">
+            <span class="file-name">IMG_20260706_01.jpg</span>
+            <span class="file-size">2.4 MB</span>
+          </div>
+          <button class="file-remove" type="button" aria-label="移除文件">✕</button>
+        </div>
+        <div class="file-item">
+          <div class="file-thumb" aria-hidden="true">🖼</div>
+          <div class="file-info">
+            <span class="file-name">IMG_20260706_02.jpg</span>
+            <span class="file-size">1.8 MB</span>
+          </div>
+          <button class="file-remove" type="button" aria-label="移除文件">✕</button>
+        </div>
+        <div class="file-item">
+          <div class="file-thumb" aria-hidden="true">🖼</div>
+          <div class="file-info">
+            <span class="file-name">IMG_20260706_03.jpg</span>
+            <span class="file-size">3.1 MB</span>
+          </div>
+          <button class="file-remove" type="button" aria-label="移除文件">✕</button>
+        </div>
+      </section>
+
+      <!-- 转换按钮 -->
+      <button class="convert-btn" type="button" aria-label="开始转换">
+        <span>🕊️</span>
+        <span>开始转换</span>
+      </button>
+    </main>
+  </div>
+</body>
+</html>

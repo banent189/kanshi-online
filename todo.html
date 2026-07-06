@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>简纸 Konshi - 待办</title>
+  <link rel="stylesheet" href="styles/theme.css">
+  <style>
+    .page-header {
+      padding-bottom: var(--space-lg);
+    }
+
+    /* ── 胶带装饰 ── */
+    .todo-note {
+      position: relative;
+    }
+
+    .todo-note::after {
+      content: "";
+      position: absolute;
+      top: calc(var(--space-lg) * -1);
+      right: var(--space-xl);
+      width: var(--space-2xl);
+      height: var(--space-5xl);
+      border: var(--border-paper-strong);
+      border-radius: var(--radius-pill);
+      transform: rotate(var(--space-sm));
+      opacity: var(--opacity-muted);
+      box-shadow: var(--shadow-xs);
+    }
+
+    .note-plant {
+      position: absolute;
+      right: var(--space-xl);
+      bottom: var(--space-sm);
+      font-size: var(--font-size-2xl);
+      color: var(--color-success);
+    }
+
+    /* ── 添加待办输入 ── */
+    .add-todo {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      height: 52px;
+      padding: 0 var(--space-lg);
+      margin-bottom: var(--space-xl);
+      background: var(--color-bg-surface);
+      border: var(--border-paper);
+      border-radius: var(--radius-pill);
+      box-shadow: var(--shadow-xs);
+    }
+
+    .add-todo-input {
+      flex: 1;
+      height: 100%;
+      background: none;
+      font-size: var(--font-size-body);
+      color: var(--color-text-primary);
+    }
+
+    .add-todo-input::placeholder {
+      color: var(--color-text-tertiary);
+    }
+
+    .add-todo-btn {
+      width: 32px;
+      height: 32px;
+      display: grid;
+      place-items: center;
+      font-size: var(--font-size-xl);
+      color: var(--color-primary);
+      background: var(--color-bg-paper);
+      border-radius: var(--radius-pill);
+      transition: transform 0.15s;
+      flex-shrink: 0;
+    }
+
+    .add-todo-btn:active {
+      transform: scale(0.88);
+    }
+
+    /* ── 筛选标签 ── */
+    .filter-tabs {
+      display: flex;
+      gap: var(--space-xs);
+      margin-bottom: var(--space-lg);
+      background: var(--color-bg-soft);
+      padding: var(--space-2xs);
+      border-radius: var(--radius-pill);
+    }
+
+    .filter-tab {
+      flex: 1;
+      padding: var(--space-xs) var(--space-sm);
+      text-align: center;
+      font-family: var(--font-family-display);
+      font-size: var(--font-size-body);
+      font-weight: var(--font-weight-medium);
+      color: var(--color-text-tertiary);
+      border-radius: var(--radius-pill);
+      transition: all 0.2s;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .filter-tab[aria-selected="true"] {
+      background: var(--color-bg-surface);
+      color: var(--color-text-primary);
+      font-weight: var(--font-weight-bold);
+      box-shadow: var(--shadow-xs);
+    }
+
+    /* ── 待办列表 ── */
+    .todo-list {
+      display: grid;
+      gap: var(--space-sm);
+    }
+
+    .todo-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      min-height: 60px;
+      padding: var(--space-md) var(--space-lg);
+      background: var(--color-bg-surface);
+      border: var(--border-paper);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-xs);
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      transition: transform 0.15s;
+    }
+
+    .todo-item:active {
+      transform: scale(0.98);
+    }
+
+    .todo-check {
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+      border-radius: var(--radius-pill);
+      border: 2px solid var(--color-border-strong);
+      background: var(--color-bg-paper);
+      display: grid;
+      place-items: center;
+      font-size: var(--font-size-sm);
+      color: transparent;
+      transition: all 0.2s;
+    }
+
+    .todo-item.done .todo-check {
+      background: var(--color-primary);
+      border-color: var(--color-primary);
+      color: var(--color-white);
+    }
+
+    .todo-text {
+      flex: 1;
+      font-family: var(--font-family-display);
+      font-size: var(--font-size-body);
+      font-weight: var(--font-weight-medium);
+      color: var(--color-text-primary);
+      line-height: var(--line-height-normal);
+      transition: all 0.2s;
+    }
+
+    .todo-item.done .todo-text {
+      color: var(--color-text-tertiary);
+      text-decoration: line-through;
+    }
+
+    .todo-tag {
+      font-family: var(--font-family-ui);
+      font-size: var(--font-size-xs);
+      padding: var(--space-2xs) var(--space-xs);
+      border-radius: var(--radius-pill);
+      background: var(--color-bg-soft);
+      color: var(--color-text-secondary);
+    }
+
+    /* ── 底部添加按钮 ── */
+    .add-bottom {
+      width: 100%;
+      min-height: 60px;
+      margin-top: var(--space-xl);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-sm);
+      border: var(--border-dashed);
+      border-radius: var(--radius-card);
+      color: var(--color-text-secondary);
+      font-family: var(--font-family-display);
+      font-size: var(--font-size-h3);
+      font-weight: var(--font-weight-semibold);
+      box-shadow: var(--shadow-xs);
+      background: var(--color-bg-surface);
+    }
+  </style>
+</head>
+<body>
+  <div class="screen">
+    <!-- 状态栏 -->
+    <div class="status-bar" aria-label="手机状态栏">
+      <span class="status-left">9:41</span>
+      <span class="status-icons" aria-hidden="true">
+        <span class="signal-bars" aria-label="信号">
+          <span class="bar" style="height:6px"></span>
+          <span class="bar" style="height:9px"></span>
+          <span class="bar" style="height:12px"></span>
+          <span class="bar" style="height:15px"></span>
+        </span>
+        <span class="wifi-icon">⌁</span>
+        <span class="battery-icon"><span class="battery-fill"></span></span>
+      </span>
+    </div>
+
+    <header class="page-header">
+      <h1 class="page-title">待办</h1>
+    </header>
+
+    <main class="page-main">
+      <!-- 便签 -->
+      <section class="paper-note todo-note" aria-labelledby="todo-note">
+        <p id="todo-note" class="note-text">
+          把今天要做的事情写下来<br />
+          完成一件，就划掉一件 ✍️
+        </p>
+        <span class="note-plant" aria-hidden="true">⌁</span>
+      </section>
+
+      <!-- 添加待办 -->
+      <div class="add-todo">
+        <input class="add-todo-input" type="text" placeholder="写下今天的待办…" aria-label="新待办" />
+        <button class="add-todo-btn" type="button" aria-label="添加">＋</button>
+      </div>
+
+      <!-- 筛选 -->
+      <div class="filter-tabs" role="tablist">
+        <button class="filter-tab" type="button" role="tab" aria-selected="true">今天</button>
+        <button class="filter-tab" type="button" role="tab" aria-selected="false">本周</button>
+        <button class="filter-tab" type="button" role="tab" aria-selected="false">全部</button>
+      </div>
+
+      <!-- 待办列表 -->
+      <section aria-label="待办列表">
+        <ul class="todo-list">
+          <li>
+            <label class="todo-item" tabindex="0">
+              <span class="todo-check">✓</span>
+              <span class="todo-text">买一束花放桌上</span>
+            </label>
+          </li>
+          <li>
+            <label class="todo-item" tabindex="0">
+              <span class="todo-check">✓</span>
+              <span class="todo-text">给朋友回消息</span>
+            </label>
+          </li>
+          <li>
+            <label class="todo-item done" tabindex="0">
+              <span class="todo-check">✓</span>
+              <span class="todo-text">写日记</span>
+              <span class="todo-tag">记录</span>
+            </label>
+          </li>
+          <li>
+            <label class="todo-item" tabindex="0">
+              <span class="todo-check">✓</span>
+              <span class="todo-text">整理灵感碎片</span>
+              <span class="todo-tag">收纳盒</span>
+            </label>
+          </li>
+          <li>
+            <label class="todo-item" tabindex="0">
+              <span class="todo-check">✓</span>
+              <span class="todo-text">读半小时书</span>
+            </label>
+          </li>
+        </ul>
+
+        <button class="add-bottom" type="button" aria-label="添加待办">
+          <span aria-hidden="true">＋</span>
+          <span>添加待办</span>
+        </button>
+      </section>
+    </main>
+
+    <!-- 底部导航 -->
+    <footer class="bottom-nav" aria-label="底部导航">
+      <a href="index.html">
+        <span class="nav-icon" aria-hidden="true">⌂</span>
+        <span>今天</span>
+      </a>
+      <a href="todo.html" aria-current="page">
+        <span class="nav-icon" aria-hidden="true">☆</span>
+        <span>待办</span>
+      </a>
+      <a href="records.html">
+        <span class="nav-icon" aria-hidden="true">▦</span>
+        <span>记录</span>
+      </a>
+      <a href="tools.html">
+        <span class="nav-icon" aria-hidden="true">▣</span>
+        <span>工具箱</span>
+      </a>
+      <a href="storage.html">
+        <span class="nav-icon" aria-hidden="true">▱</span>
+        <span>收纳盒</span>
+      </a>
+    </footer>
+  </div>
+
+  <script>
+    // 待办勾选交互
+    document.querySelectorAll('.todo-item').forEach(item => {
+      item.addEventListener('click', function(e) {
+        this.classList.toggle('done');
+      });
+    });
+
+    // 筛选标签切换
+    document.querySelectorAll('.filter-tab').forEach(tab => {
+      tab.addEventListener('click', function() {
+        document.querySelectorAll('.filter-tab').forEach(t => t.setAttribute('aria-selected', 'false'));
+        this.setAttribute('aria-selected', 'true');
+      });
+    });
+  </script>
+</body>
+</html>

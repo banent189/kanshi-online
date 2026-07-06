@@ -12,6 +12,12 @@ dist
 dist-ssr
 *.local
 
+# Legacy / 旧版源码
+_legacy/
+
+# Design mockups / 设计稿
+pic/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

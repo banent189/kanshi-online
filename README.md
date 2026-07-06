@@ -1,32 +1,37 @@
-# React + TypeScript + Vite
+# 简纸 Konshi
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+纸质手帐风的个人工具网站 · 移动端交互原型
 
-Currently, two official plugins are available:
+## 页面结构
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+| 页面 | 文件 | 说明 |
+|------|------|------|
+| 🏠 今天 | `index.html` | 首页仪表盘：问候、搜索、快捷入口、常用工具、收纳盒预览 |
+| ✅ 待办 | `todo.html` | 今日待办清单，可勾选完成 |
+| ✍️ 记录 | `records.html` | 日记、读书笔记、习惯打卡等创作入口 |
+| 🧰 工具箱 | `tools.html` | 工具全集，可按分类浏览 |
+| 🗃️ 收纳盒 | `storage.html` | 灵感碎片、密码本等归档管理 |
 
-## React Compiler
+### 子页面
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+| 页面 | 文件 |
+|------|------|
+| 🖼️ 图片转PDF | `tools/img-to-pdf.html` |
 
-## Expanding the Oxlint configuration
+## 设计系统
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+- **配色**：暖调米色纸感风格
+- **字体**：霞鹛文楷（显示/正文）、PingFang SC（UI）
+- **布局**：移动端全屏，无手机模拟框，真实状态栏
+- **质感**：纸张纹理、胶带装饰、虚线边框、柔和阴影
 
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
-```
+## 开发
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+所有页面为纯 HTML + CSS，无框架依赖。共享样式位于 `styles/theme.css`。
+
+在浏览器中直接打开 `index.html` 即可预览。部署到 Cloudflare Pages 可直接指向项目根目录。
+
+## 版本历史
+
+- **v8+**: 移动端纸质手帐原型（当前）
+- **v7**: React + TypeScript PWA 图片转PDF 工具（旧版，`git checkout v7` 回退）

@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>简纸 Konshi - 记录</title>
+  <link rel="stylesheet" href="styles/theme.css" />
+  <style>
+    .page-header {
+      padding-bottom: var(--space-lg);
+    }
+
+    /* ── 便签 ── */
+    .record-note {
+      position: relative;
+      min-height: 140px;
+    }
+
+    .record-note::after {
+      content: "";
+      position: absolute;
+      top: calc(var(--space-lg) * -1);
+      right: var(--space-xl);
+      width: var(--space-2xl);
+      height: var(--space-5xl);
+      border: var(--border-paper-strong);
+      border-radius: var(--radius-pill);
+      transform: rotate(var(--space-sm));
+      opacity: var(--opacity-muted);
+      box-shadow: var(--shadow-xs);
+    }
+
+    .note-plant {
+      position: absolute;
+      right: var(--space-xl);
+      bottom: var(--space-md);
+      font-size: var(--font-size-2xl);
+      color: var(--color-success);
+      opacity: var(--opacity-muted);
+    }
+
+    /* ── 记录列表 ── */
+    .record-list {
+      display: grid;
+      gap: var(--space-md);
+    }
+
+    .record-card {
+      min-height: 86px;
+      display: grid;
+      grid-template-columns: 56px 1fr 40px;
+      align-items: center;
+      gap: var(--space-md);
+      padding: var(--space-md) var(--space-lg);
+      background: var(--color-bg-surface);
+      border: var(--border-paper);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-paper);
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .record-card:active {
+      transform: scale(0.98);
+    }
+
+    .record-icon {
+      width: 56px;
+      height: 56px;
+      display: grid;
+      place-items: center;
+      border-radius: var(--radius-md);
+      background: var(--color-bg-paper);
+      color: var(--color-primary-dark);
+      font-size: var(--font-size-2xl);
+      box-shadow: var(--shadow-xs);
+    }
+
+    .record-card:nth-child(1) .record-icon { color: var(--color-warning); }
+    .record-card:nth-child(2) .record-icon { background: var(--color-card-yellow); color: var(--color-primary-dark); }
+    .record-card:nth-child(3) .record-icon { color: var(--color-success); }
+    .record-card:nth-child(4) .record-icon { color: var(--color-info); }
+    .record-card:nth-child(5) .record-icon { color: var(--color-warning); }
+    .record-card:nth-child(6) .record-icon { background: var(--color-card-blue); color: var(--color-info); }
+
+    .record-content {
+      display: grid;
+      gap: var(--space-2xs);
+    }
+
+    .record-title {
+      margin: 0;
+      font-family: var(--font-family-display);
+      font-size: var(--font-size-h3);
+      font-weight: var(--font-weight-bold);
+      line-height: var(--line-height-tight);
+      color: var(--color-text-primary);
+    }
+
+    .record-desc {
+      margin: 0;
+      font-family: var(--font-family-display);
+      font-size: var(--font-size-body);
+      font-weight: var(--font-weight-medium);
+      line-height: var(--line-height-normal);
+      color: var(--color-text-tertiary);
+    }
+
+    .record-deco {
+      justify-self: end;
+      font-size: var(--font-size-2xl);
+      color: var(--color-success);
+      opacity: var(--opacity-muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="screen">
+    <!-- 状态栏 -->
+    <div class="status-bar" aria-label="手机状态栏">
+      <span class="status-left">9:41</span>
+      <span class="status-icons" aria-hidden="true">
+        <span class="signal-bars" aria-label="信号">
+          <span class="bar" style="height:6px"></span>
+          <span class="bar" style="height:9px"></span>
+          <span class="bar" style="height:12px"></span>
+          <span class="bar" style="height:15px"></span>
+        </span>
+        <span class="wifi-icon">⌁</span>
+        <span class="battery-icon"><span class="battery-fill"></span></span>
+      </span>
+    </div>
+
+    <header class="page-header">
+      <h1 class="page-title">记录</h1>
+    </header>
+
+    <main class="page-main">
+      <!-- 便签 -->
+      <section class="paper-note record-note" aria-labelledby="record-note">
+        <p id="record-note" class="note-text">
+          记录生活中的点滴<br />
+          让回忆更有迹可循
+        </p>
+        <span class="note-plant" aria-hidden="true">⌁</span>
+      </section>
+
+      <!-- 记录列表 -->
+      <section aria-label="记录分类">
+        <ul class="record-list">
+          <li>
+            <article class="record-card">
+              <div class="record-icon" aria-hidden="true">▤</div>
+              <div class="record-content">
+                <h2 class="record-title">今日记事</h2>
+                <p class="record-desc">记录今天的小事</p>
+              </div>
+              <span class="record-deco" aria-hidden="true">⌁</span>
+            </article>
+          </li>
+          <li>
+            <article class="record-card">
+              <div class="record-icon" aria-hidden="true">📒</div>
+              <div class="record-content">
+                <h2 class="record-title">日记本</h2>
+                <p class="record-desc">我的心情日记</p>
+              </div>
+              <span class="record-deco" aria-hidden="true">⌁</span>
+            </article>
+          </li>
+          <li>
+            <article class="record-card">
+              <div class="record-icon" aria-hidden="true">✓</div>
+              <div class="record-content">
+                <h2 class="record-title">习惯打卡</h2>
+                <p class="record-desc">坚持会成长的自己</p>
+              </div>
+              <span class="record-deco" aria-hidden="true">⌁</span>
+            </article>
+          </li>
+          <li>
+            <article class="record-card">
+              <div class="record-icon" aria-hidden="true">🧸</div>
+              <div class="record-content">
+                <h2 class="record-title">软件足迹</h2>
+                <p class="record-desc">记录世界的每一步</p>
+              </div>
+              <span class="record-deco" aria-hidden="true">⌁</span>
+            </article>
+          </li>
+          <li>
+            <article class="record-card">
+              <div class="record-icon" aria-hidden="true">📚</div>
+              <div class="record-content">
+                <h2 class="record-title">读书笔记</h2>
+                <p class="record-desc">书中自有黄金屋</p>
+              </div>
+              <span class="record-deco" aria-hidden="true">⌁</span>
+            </article>
+          </li>
+          <li>
+            <article class="record-card">
+              <div class="record-icon" aria-hidden="true">🖼</div>
+              <div class="record-content">
+                <h2 class="record-title">影像记录</h2>
+                <p class="record-desc">用照片化成主题</p>
+              </div>
+              <span class="record-deco" aria-hidden="true">⌁</span>
+            </article>
+          </li>
+        </ul>
+      </section>
+    </main>
+
+    <!-- 底部导航 -->
+    <footer class="bottom-nav" aria-label="底部导航">
+      <a href="index.html">
+        <span class="nav-icon" aria-hidden="true">⌂</span>
+        <span>今天</span>
+      </a>
+      <a href="todo.html">
+        <span class="nav-icon" aria-hidden="true">☆</span>
+        <span>待办</span>
+      </a>
+      <a href="records.html" aria-current="page">
+        <span class="nav-icon" aria-hidden="true">▦</span>
+        <span>记录</span>
+      </a>
+      <a href="tools.html">
+        <span class="nav-icon" aria-hidden="true">▣</span>
+        <span>工具箱</span>
+      </a>
+      <a href="storage.html">
+        <span class="nav-icon" aria-hidden="true">▱</span>
+        <span>收纳盒</span>
+      </a>
+    </footer>
+  </div>
+</body>
+</html>

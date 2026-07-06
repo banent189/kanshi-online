@@ -1,25 +1,520 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="zh-CN">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <meta name="theme-color" content="#2B4C7E" />
-    <meta name="description" content="簡紙 Kanshi - 图片文档转PDF工具，从微信分享即可转换" />
-    <!-- iOS PWA 支持 -->
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-    <meta name="apple-mobile-web-app-title" content="簡紙" />
-    <link rel="apple-touch-icon" href="/icon-180.png" />
-    <link rel="apple-touch-icon" sizes="120x120" href="/icon-120.png" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/icon-180.png" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet" />
-    <title>簡紙 Kanshi - 文件转PDF</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>简纸 Konshi - 今天</title>
+  <link rel="stylesheet" href="styles/theme.css">
+  <style>
+    /* ── 品牌头部 ── */
+    .app-header {
+      padding: var(--space-xl) var(--page-padding-x) var(--space-lg);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand-left {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+    }
+
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: var(--space-4xl);
+      height: var(--space-4xl);
+      font-size: var(--font-size-2xl);
+      color: var(--color-warning);
+    }
+
+    .brand-title {
+      margin: 0;
+      font-family: var(--font-family-display);
+      font-size: var(--font-size-h1);
+      font-weight: var(--font-weight-bold);
+      line-height: var(--line-height-tight);
+      color: var(--color-text-primary);
+    }
+
+    .brand-title span {
+      font-family: var(--font-family-ui);
+      font-size: var(--font-size-md);
+      font-weight: var(--font-weight-medium);
+      color: var(--color-text-primary);
+    }
+
+    .icon-button {
+      width: var(--space-4xl);
+      height: var(--space-4xl);
+      display: grid;
+      place-items: center;
+      background: var(--color-bg-paper);
+      color: var(--color-text-secondary);
+      border: var(--border-paper);
+      border-radius: var(--radius-pill);
+      box-shadow: var(--shadow-xs);
+      font-size: var(--font-size-xl);
+      transition: transform 0.15s;
+    }
+
+    .icon-button:active {
+      transform: scale(0.92);
+    }
+
+    /* ── 欢迎卡片 ── */
+    .welcome-card {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: var(--space-md);
+      min-height: calc(var(--tool-card-height) - var(--space-2xl));
+      padding: var(--space-lg) var(--space-xl);
+      background: var(--color-bg-surface);
+      border: var(--border-paper);
+      border-radius: var(--radius-paper-card);
+      box-shadow: var(--shadow-paper);
+    }
+
+    .welcome-card::before {
+      content: "";
+      position: absolute;
+      top: calc(var(--space-md) * -1);
+      right: var(--space-3xl);
+      width: var(--space-4xl);
+      height: var(--space-lg);
+      background: var(--color-tape);
+      border-radius: var(--radius-xs);
+      opacity: var(--opacity-muted);
+      transform: rotate(-14deg);
+    }
+
+    .welcome-text {
+      margin: 0;
+      font-family: var(--font-family-display);
+      font-size: var(--font-size-h3);
+      font-weight: var(--font-weight-medium);
+      line-height: var(--line-height-loose);
+      color: var(--color-text-primary);
+    }
+
+    .welcome-illustration {
+      width: var(--quick-action-size);
+      height: var(--quick-action-size);
+      display: grid;
+      place-items: center;
+      font-size: var(--font-size-2xl);
+      background: var(--color-bg-paper);
+      border: var(--border-paper);
+      border-radius: var(--radius-pill);
+      box-shadow: var(--shadow-xs);
+    }
+
+    /* ── 搜索 ── */
+    .search-section {
+      margin-top: var(--space-xl);
+    }
+
+    .search-box {
+      height: var(--search-height);
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      padding: 0 var(--space-lg);
+      background: var(--color-bg-surface);
+      border: var(--border-paper);
+      border-radius: var(--radius-search);
+      box-shadow: var(--shadow-xs);
+    }
+
+    .search-icon {
+      font-size: var(--font-size-xl);
+      color: var(--color-text-primary);
+    }
+
+    .search-box input {
+      width: 100%;
+      background: none;
+      color: var(--color-text-primary);
+      font-size: var(--font-size-body);
+    }
+
+    .search-box input::placeholder {
+      color: var(--color-text-tertiary);
+    }
+
+    /* ── 快捷入口 ── */
+    .quick-actions {
+      margin: var(--space-xl) 0 0;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: var(--space-sm);
+    }
+
+    .quick-action {
+      min-height: calc(var(--quick-action-size) + var(--space-md));
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-xs);
+      padding: var(--space-xs);
+      background: var(--color-bg-surface);
+      border: var(--border-paper);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-sm);
+      color: var(--color-text-primary);
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .quick-action:active {
+      transform: scale(0.95);
+    }
+
+    .quick-action-icon {
+      display: grid;
+      place-items: center;
+      width: var(--space-3xl);
+      height: var(--space-3xl);
+      font-size: var(--font-size-xl);
+      color: var(--color-primary-dark);
+    }
+
+    .quick-action-label {
+      font-family: var(--font-family-display);
+      font-size: var(--font-size-tab);
+      font-weight: var(--font-weight-semibold);
+      line-height: var(--line-height-tight);
+      color: var(--color-text-primary);
+    }
+
+    /* ── 常用工具面板 ── */
+    .panel {
+      margin-top: var(--space-xl);
+      padding: var(--space-xl) var(--space-md);
+      background: var(--color-bg-soft);
+      border-radius: var(--radius-2xl);
+    }
+
+    .panel-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--card-gap);
+    }
+
+    .home-tool-card {
+      min-height: var(--tool-card-height);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-sm);
+      padding: var(--space-md);
+      background: var(--color-bg-surface);
+      border: var(--border-paper);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-paper);
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .home-tool-card:active {
+      transform: scale(0.97);
+    }
+
+    .tool-illustration {
+      width: calc(var(--quick-action-size) + var(--space-lg));
+      height: var(--quick-action-size);
+      display: grid;
+      place-items: center;
+      background: var(--color-bg-paper);
+      border: var(--border-paper);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-xs);
+      font-size: var(--font-size-2xl);
+      color: var(--color-primary-dark);
+    }
+
+    .home-tool-card:nth-child(1) .tool-illustration {
+      background: var(--color-card-blue);
+    }
+
+    .home-tool-card:nth-child(2) .tool-illustration {
+      background: var(--color-bg-muted);
+    }
+
+    .home-tool-card:nth-child(3) .tool-illustration {
+      background: var(--color-folder);
+    }
+
+    .home-tool-card:nth-child(4) .tool-illustration {
+      background: var(--color-card-yellow);
+    }
+
+    .tool-label {
+      margin: 0;
+      font-family: var(--font-family-display);
+      font-size: var(--font-size-md);
+      font-weight: var(--font-weight-semibold);
+      line-height: var(--line-height-tight);
+      color: var(--color-text-primary);
+    }
+
+    /* ── 收纳盒预览 ── */
+    .storage {
+      margin-top: var(--space-xl);
+      padding: var(--space-xl) var(--space-md) var(--space-lg);
+      background: var(--color-bg-soft);
+      border-radius: var(--radius-2xl);
+    }
+
+    .storage-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: var(--space-lg);
+    }
+
+    .storage-header .section-title {
+      margin: 0;
+    }
+
+    .storage-link {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      font-family: var(--font-family-display);
+      font-size: var(--font-size-body);
+      font-weight: var(--font-weight-medium);
+      color: var(--color-text-secondary);
+    }
+
+    .storage-box {
+      position: relative;
+      min-height: calc(var(--tool-card-height) + var(--space-4xl));
+      padding: var(--space-xl) var(--space-md) var(--space-md);
+      overflow: hidden;
+      background: var(--color-bg-muted);
+      border: var(--border-paper-strong);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-inner);
+    }
+
+    .storage-box::after {
+      content: "";
+      position: absolute;
+      left: var(--space-xl);
+      right: var(--space-xl);
+      bottom: var(--space-lg);
+      height: var(--space-xs);
+      background: var(--color-border-strong);
+      border-radius: var(--radius-pill);
+      opacity: var(--opacity-muted);
+    }
+
+    .folder-stack {
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      gap: var(--space-sm);
+      min-height: calc(var(--tool-card-height) + var(--space-xl));
+    }
+
+    .folder-tab {
+      position: relative;
+      width: calc(var(--quick-action-size) + var(--space-3xl));
+      min-height: calc(var(--quick-action-size) + var(--space-xl));
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: var(--space-xl) var(--space-xs) var(--space-sm);
+      background: var(--color-bg-surface);
+      border: var(--border-paper-strong);
+      border-radius: var(--radius-md) var(--radius-md) var(--radius-sm) var(--radius-sm);
+      box-shadow: var(--shadow-sm);
+      font-family: var(--font-family-display);
+      font-size: var(--font-size-md);
+      font-weight: var(--font-weight-semibold);
+      color: var(--color-text-primary);
+    }
+
+    .folder-tab::before {
+      content: "";
+      position: absolute;
+      top: calc(var(--space-sm) * -1);
+      left: var(--space-sm);
+      width: calc(var(--quick-action-size) - var(--space-sm));
+      height: var(--space-lg);
+      background: inherit;
+      border: var(--border-paper-strong);
+      border-bottom: 0;
+      border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+    }
+
+    .folder-tab.is-yellow {
+      background: var(--color-card-yellow);
+    }
+
+    .folder-tab.is-blue {
+      background: var(--color-card-blue);
+    }
+
+    /* ── 主页内容内边距 ── */
+    .home-content {
+      padding: 0 var(--page-padding-x) var(--tabbar-height);
+    }
+
+    /* ── 页面滚动 ── */
+    .scroll-content {
+      flex: 1;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+  </style>
+</head>
+<body>
+  <div class="screen">
+    <!-- 状态栏 -->
+    <div class="status-bar" aria-label="手机状态栏">
+      <span class="status-left">9:41</span>
+      <span class="status-icons" aria-hidden="true">
+        <span class="signal-bars" aria-label="信号">
+          <span class="bar" style="height:6px"></span>
+          <span class="bar" style="height:9px"></span>
+          <span class="bar" style="height:12px"></span>
+          <span class="bar" style="height:15px"></span>
+        </span>
+        <span class="wifi-icon">⌁</span>
+        <span class="battery-icon"><span class="battery-fill"></span></span>
+      </span>
+    </div>
+
+    <div class="scroll-content">
+      <!-- 品牌头部 -->
+      <header class="app-header">
+        <div class="brand">
+          <div class="brand-left">
+            <div class="brand-mark" aria-hidden="true">🕊️</div>
+            <h1 class="brand-title">简纸 <span>Konshi</span></h1>
+          </div>
+          <button class="icon-button" type="button" aria-label="通知">
+            ♡
+          </button>
+        </div>
+      </header>
+
+      <!-- 主内容 -->
+      <main class="home-content">
+        <!-- 欢迎卡片 -->
+        <section class="welcome-card" aria-labelledby="welcome-title">
+          <p id="welcome-title" class="welcome-text">
+            早安，愿你有<br />温柔而闪光的一天
+          </p>
+          <div class="welcome-illustration" aria-hidden="true">🪴</div>
+        </section>
+
+        <!-- 搜索 -->
+        <section class="search-section" aria-label="搜索">
+          <form class="search-box" role="search">
+            <span class="search-icon" aria-hidden="true">⌕</span>
+            <input type="search" name="keyword" placeholder="搜索你的内容、工具或灵感..." aria-label="搜索" />
+          </form>
+        </section>
+
+        <!-- 快捷入口 -->
+        <nav aria-label="快捷入口">
+          <ul class="quick-actions">
+            <li><a class="quick-action" href="todo.html">
+              <span class="quick-action-icon" aria-hidden="true">☑</span>
+              <span class="quick-action-label">待办</span>
+            </a></li>
+            <li><a class="quick-action" href="records.html">
+              <span class="quick-action-icon" aria-hidden="true">✺</span>
+              <span class="quick-action-label">记录</span>
+            </a></li>
+            <li><a class="quick-action" href="tools.html">
+              <span class="quick-action-icon" aria-hidden="true">▤</span>
+              <span class="quick-action-label">扫描</span>
+            </a></li>
+            <li><a class="quick-action" href="tools.html">
+              <span class="quick-action-icon" aria-hidden="true">▧</span>
+              <span class="quick-action-label">图片</span>
+            </a></li>
+            <li><a class="quick-action" href="storage.html">
+              <span class="quick-action-icon" aria-hidden="true">♢</span>
+              <span class="quick-action-label">灵感</span>
+            </a></li>
+          </ul>
+        </nav>
+
+        <!-- 常用工具 -->
+        <section class="panel" aria-labelledby="tools-title">
+          <h2 id="tools-title" class="section-title">常用工具</h2>
+          <div class="panel-grid">
+            <article class="home-tool-card" onclick="location.href='tools/img-to-pdf.html'">
+              <div class="tool-illustration" aria-hidden="true">🌼</div>
+              <h3 class="tool-label">照片手账</h3>
+            </article>
+            <article class="home-tool-card" onclick="location.href='tools.html'">
+              <div class="tool-illustration" aria-hidden="true">▭</div>
+              <h3 class="tool-label">扫描卡片</h3>
+            </article>
+            <article class="home-tool-card" onclick="location.href='tools.html'">
+              <div class="tool-illustration" aria-hidden="true">🗂️</div>
+              <h3 class="tool-label">文件整理</h3>
+            </article>
+            <article class="home-tool-card" onclick="location.href='tools.html'">
+              <div class="tool-illustration" aria-hidden="true">🥗</div>
+              <h3 class="tool-label">热量日记</h3>
+            </article>
+          </div>
+        </section>
+
+        <!-- 收纳盒预览 -->
+        <section class="storage" aria-labelledby="storage-title">
+          <div class="storage-header">
+            <h2 id="storage-title" class="section-title">收纳盒</h2>
+            <a class="storage-link" href="storage.html">全部盒子 ›</a>
+          </div>
+          <div class="storage-box" aria-label="收纳盒预览">
+            <div class="folder-stack">
+              <article class="folder-tab is-yellow">灵感碎片</article>
+              <article class="folder-tab">密码盒</article>
+              <article class="folder-tab is-blue">历史记录</article>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <!-- 底部导航 -->
+    <footer class="bottom-nav" aria-label="底部导航">
+      <a href="index.html" aria-current="page">
+        <span class="nav-icon" aria-hidden="true">⌂</span>
+        <span>今天</span>
+      </a>
+      <a href="todo.html">
+        <span class="nav-icon" aria-hidden="true">☆</span>
+        <span>待办</span>
+      </a>
+      <a href="records.html">
+        <span class="nav-icon" aria-hidden="true">▦</span>
+        <span>记录</span>
+      </a>
+      <a href="tools.html">
+        <span class="nav-icon" aria-hidden="true">▣</span>
+        <span>工具箱</span>
+      </a>
+      <a href="storage.html">
+        <span class="nav-icon" aria-hidden="true">▱</span>
+        <span>收纳盒</span>
+      </a>
+    </footer>
+  </div>
+</body>
 </html>
