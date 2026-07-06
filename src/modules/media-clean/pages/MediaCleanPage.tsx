@@ -28,7 +28,7 @@ export default function MediaCleanPage() {
         animate={{ opacity: 1 }}
         transition={{ delay: 0.1 }}
       >
-        去除水印
+        🖼️ 图片水印去除
       </motion.p>
 
       {/* 内容 */}

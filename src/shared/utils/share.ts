@@ -86,7 +86,7 @@ export function downloadFile(blob: Blob, fileName: string) {
  * 会触发微信自带的文件查看器，用户可以通过查看器的「···」
  * 菜单发送给朋友。
  */
-export function previewFileInWeChat(blob: Blob, _fileName: string) {
+export function previewFileInWeChat(blob: Blob, fileName: string) {
   const url = URL.createObjectURL(blob)
   const a = document.createElement('a')
   a.href = url

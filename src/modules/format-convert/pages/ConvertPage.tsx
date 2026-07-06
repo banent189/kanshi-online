@@ -57,7 +57,7 @@ export default function ConvertPage() {
     try {
       if ('launchQueue' in window && window.launchQueue && !launchQueueSet.current) {
         launchQueueSet.current = true
-        ;(window as any).launchQueue.setConsumer(async (params: any) => {
+        window.launchQueue.setConsumer(async (params) => {
           const handles = params.files
           if (handles && handles.length > 0) {
             const items: FileItem[] = []
@@ -335,6 +335,7 @@ export default function ConvertPage() {
             whileTap={{ scale: 0.96 }}
             onClick={handleConvert}
           >
+            <span>🕊️</span>
             开始转换 {formatInfo?.label}
           </motion.button>
 

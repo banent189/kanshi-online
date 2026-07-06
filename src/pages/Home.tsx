@@ -1,96 +1,60 @@
+import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import LeftNav from '../components/desk/LeftNav'
-import BottomNav from '../components/desk/BottomNav'
-import {
-  SearchBar,
-  LifeCard,
-  ToolCard,
-  DrawerArea,
-  MobileLifeCard,
-  MobileToolCards,
-  MobileDrawer,
-} from '../components/desk/DeskSurface'
-import { TOOLS } from '../components/desk/toolDefs'
+import Logo from '../shared/components/Logo'
+import { getModules } from '../modules/registry'
 
 export default function Home() {
+  const navigate = useNavigate()
+  const modules = getModules()
+
   return (
-    <div className="min-h-screen flex" style={{ backgroundColor: 'var(--washi)' }}>
-      {/* ── 桌面左侧导航 ── */}
-      <div className="desktop-only">
-        <LeftNav />
+    <div className="min-h-screen flex flex-col px-6 py-8" style={{ backgroundColor: 'var(--washi)' }}>
+      <div className="pt-12 pb-6">
+        <Logo size="md" />
       </div>
 
-      {/* ── 主体内容 ── */}
-      {/* 桌面：ml-48 给左侧导航留位 */}
-      <main className="flex-1 flex flex-col min-h-screen desktop-only ml-48 relative">
-        {/* 顶部搜索条 */}
-        <SearchBar />
+      <motion.p
+        className="text-center text-sm mb-6"
+        style={{ color: 'var(--ink-light)' }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.3 }}
+      >
+        选择工具
+      </motion.p>
 
-        {/* 桌面卡片区 - 使用相对定位实现"桌面摆放"效果 */}
-        <div className="relative flex-1 mx-4" style={{ minHeight: 700 }}>
-          {/* 中央生活卡 */}
-          <div className="absolute" style={{ top: '8%', left: '2%', width: '45%', zIndex: 15 }}>
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.25, duration: 0.5, ease: 'easeOut' }}
-            >
-              <LifeCard />
-            </motion.div>
-          </div>
-
-          {/* 浮动工具卡 */}
-          {TOOLS.map((tool, i) => (
-            <ToolCard key={tool.id} tool={tool} index={i} />
-          ))}
-
-          {/* 植物装饰 */}
-          <div
-            className="absolute pointer-events-none select-none opacity-10"
-            style={{ bottom: '30%', right: '2%', transform: 'rotate(-10deg)' }}
-          >
-            <span style={{ fontSize: 64 }}>🌿</span>
-          </div>
-        </div>
-
-        {/* 底部收纳区 */}
-        <DrawerArea />
-      </main>
-
-      {/* ── 移动端布局 ── */}
-      <div className="mobile-only flex flex-col w-full min-h-screen">
-        {/* 移动端顶部问候 */}
-        <div className="px-4 pt-5 pb-1">
-          <motion.div
-            className="flex items-center gap-3"
-            initial={{ opacity: 0, y: -10 }}
+      {/* 模块卡片网格 */}
+      <div className="max-w-xs mx-auto w-full space-y-3">
+        {modules.map((m, i) => (
+          <motion.button
+            key={m.id}
+            className="w-full rounded-2xl border-2 border-[var(--border)] bg-white/60 p-5
+              flex items-center gap-4 active:scale-[0.97] transition-all duration-150 text-left"
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
+            transition={{ delay: 0.3 + i * 0.08 }}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={() => navigate(m.routes[0].path || '/')}
           >
-            <span className="font-handwriting text-2xl" style={{ color: 'var(--ink)' }}>
-              简紙
-            </span>
-            <span className="text-xs opacity-30">Kanshi</span>
-          </motion.div>
-        </div>
-
-        {/* 移动端搜索条 */}
-        <div className="px-4 pb-2">
-          <SearchBar />
-        </div>
-
-        {/* 移动端生活卡 */}
-        <MobileLifeCard />
-
-        {/* 移动端工具列表 */}
-        <MobileToolCards />
-
-        {/* 移动端收纳区 */}
-        <MobileDrawer />
-
-        {/* 移动端底部导航 */}
-        <BottomNav />
+            <span className="text-3xl">{m.icon}</span>
+            <div className="min-w-0">
+              <div className="font-medium" style={{ color: 'var(--ink)' }}>{m.name}</div>
+              <div className="text-xs mt-0.5 opacity-50">{m.description}</div>
+            </div>
+            <span className="ml-auto text-lg opacity-30">›</span>
+          </motion.button>
+        ))}
       </div>
+
+      <motion.div
+        className="mt-auto text-center py-6 text-xs opacity-30"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.8 }}
+      >
+        文件仅在本地处理，不会上传
+      </motion.div>
     </div>
   )
 }
