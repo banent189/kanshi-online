@@ -1,48 +1,47 @@
 /* ============================================================
-   简纸 Konshi — v10 Editorial Minimal | 精致编辑风格
+   简纸 Konshi — v10 温暖手帐风 | 大胆纸感设计
    ============================================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&display=swap');
-
 :root {
-  /* ---- Brand Palette: Copper + Ink Green ---- */
-  --color-primary: #C4733A;
-  --color-primary-dark: #9A5A2E;
-  --color-primary-light: #E8CBB0;
+  /* ---- Brand Palette: 赭石 + 墨绿 ---- */
+  --color-primary: #B87333;
+  --color-primary-dark: #8B5A2B;
+  --color-primary-light: #E8D5C0;
 
-  /* ---- Paper Backgrounds ---- */
-  --color-bg-app: #F0EBE3;
-  --color-bg-paper: #F7F2EA;
-  --color-bg-surface: #FCF8F3;
-  --color-bg-soft: #E8E0D6;
-  --color-bg-muted: #DED4C8;
+  /* ---- 纸面背景（明显偏暖、偏米）---- */
+  --color-bg-app: #E5DDD0;
+  --color-bg-paper: #F0E8D9;
+  --color-bg-surface: #FAF3E6;
+  --color-bg-soft: #E2D9CA;
+  --color-bg-muted: #D6CCBB;
 
-  /* ---- Text ---- */
+  /* ---- 文字 ---- */
   --color-text-primary: #1C1814;
   --color-text-secondary: #7D6E60;
   --color-text-tertiary: #B0A294;
 
-  /* ---- Borders ---- */
-  --color-border: #E3D9CE;
-  --color-border-strong: #D0C3B4;
-  --color-divider: #EAE2D8;
+  /* ---- 边框 ---- */
+  --color-border: #DDD0C0;
+  --color-border-strong: #C8B8A4;
+  --color-divider: #E5DCCE;
   --color-white: #FFFFFF;
 
-  /* ---- Functional Colors ---- */
+  /* ---- 功能色 ---- */
   --color-success: #4A7C5E;
-  --color-warning: #C4733A;
+  --color-warning: #B87333;
   --color-error: #B85C5C;
   --color-info: #5B7FA5;
 
-  /* ---- Craft / Illustration ---- */
-  --color-tape: #D4BFA8;
-  --color-folder: #BC8F5A;
-  --color-card-blue: #D3DEDD;
-  --color-card-yellow: #F0DFC0;
-  --color-ink-green: #4A7C5E;
+  /* ---- 手帐装饰色 ---- */
+  --color-tape: #C9A87C;
+  --color-folder: #A67C52;
+  --color-card-blue: #C8D5D2;
+  --color-card-yellow: #EAD5AD;
+  --color-card-rose: #E5C9C5;
+  --color-card-green: #C5D5C8;
 
-  /* ---- Typography ---- */
-  --font-family-display: "Noto Serif SC", "STSongti", "SimSun", "Songti SC", Georgia, serif;
+  /* ---- 字体 ---- */
+  --font-family-display: "LXGW WenKai", "Ma Shan Zheng", "STKaiti", "KaiTi", Georgia, serif;
   --font-family-body: "LXGW WenKai", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
   --font-family-ui: "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
 
@@ -51,8 +50,8 @@
   --font-size-tab: 12px;
   --font-size-body: 15px;
   --font-size-md: 16px;
-  --font-size-h3: 17px;
-  --font-size-h2: 22px;
+  --font-size-h3: 18px;
+  --font-size-h2: 23px;
   --font-size-h1: 28px;
   --font-size-xl: 32px;
   --font-size-2xl: 36px;
@@ -68,7 +67,7 @@
   --line-height-normal: 1.5;
   --line-height-loose: 1.7;
 
-  /* ---- Spacing (4px base) ---- */
+  /* ---- 间距 ---- */
   --space-2xs: 4px;
   --space-xs: 8px;
   --space-sm: 12px;
@@ -81,17 +80,17 @@
   --space-5xl: 64px;
   --space-6xl: 80px;
 
-  /* ---- Layout ---- */
+  /* ---- 布局 ---- */
   --page-padding-x: 20px;
   --section-gap: 24px;
   --card-gap: 14px;
   --search-height: 48px;
   --quick-action-size: 60px;
   --tool-card-height: 124px;
-  --tabbar-height: 72px;
+  --tabbar-height: 80px;
   --status-bar-height: 44px;
 
-  /* ---- Radius ---- */
+  /* ---- 圆角 ---- */
   --radius-xs: 6px;
   --radius-sm: 10px;
   --radius-md: 14px;
@@ -104,27 +103,24 @@
   --radius-search: 999px;
   --radius-btn: 999px;
 
-  /* ---- Shadows (warm, editorial) ---- */
-  --shadow-xs: 0 1px 2px rgba(40, 30, 20, 0.04);
-  --shadow-sm: 0 2px 4px rgba(40, 30, 20, 0.05), 0 1px 2px rgba(40, 30, 20, 0.03);
-  --shadow-md: 0 4px 12px rgba(40, 30, 20, 0.07), 0 2px 4px rgba(40, 30, 20, 0.04);
-  --shadow-lg: 0 8px 24px rgba(40, 30, 20, 0.09), 0 4px 8px rgba(40, 30, 20, 0.05);
-  --shadow-paper: 0 2px 8px rgba(50, 38, 25, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.5);
-  --shadow-inner: inset 0 1px 3px rgba(50, 38, 25, 0.05);
+  /* ---- 阴影（纸感层叠）---- */
+  --shadow-xs: 0 1px 2px rgba(60, 45, 30, 0.05);
+  --shadow-sm: 0 2px 6px rgba(60, 45, 30, 0.07), 0 1px 2px rgba(60, 45, 30, 0.03);
+  --shadow-md: 0 6px 16px rgba(60, 45, 30, 0.09), 0 2px 6px rgba(60, 45, 30, 0.05);
+  --shadow-lg: 0 10px 28px rgba(60, 45, 30, 0.10), 0 4px 10px rgba(60, 45, 30, 0.06);
+  --shadow-paper: 0 2px 10px rgba(60, 45, 30, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  --shadow-inner: inset 0 2px 4px rgba(60, 45, 30, 0.06);
+  --shadow-card-lift: 0 2px 8px rgba(60, 45, 30, 0.06), 0 1px 2px rgba(60, 45, 30, 0.03);
+  --shadow-tabbar: 0 -2px 10px rgba(60, 45, 30, 0.04);
 
-  /* ---- Border shorthands ---- */
+  /* ---- 边框 ---- */
   --border-paper: 1px solid var(--color-border);
   --border-paper-strong: 1px solid var(--color-border-strong);
   --border-dashed: 1px dashed var(--color-border-strong);
 
-  /* ---- Opacity ---- */
+  /* ---- 透明度 ---- */
   --opacity-disabled: 0.35;
   --opacity-muted: 0.55;
-
-  /* ---- Paper Texture ---- */
-  --paper-noise-opacity: 0.03;
-  --paper-fold-opacity: 0.08;
-  --paper-edge-opacity: 0.12;
 }
 
 /* ============================================================
@@ -154,7 +150,6 @@ a { color: inherit; text-decoration: none; transition: color 0.15s; }
 input, textarea { font: inherit; border: 0; outline: none; }
 ul, ol { list-style: none; margin: 0; padding: 0; }
 
-/* Keyboard focus ring */
 :focus-visible {
   outline: 2px solid var(--color-primary);
   outline-offset: 2px;
@@ -162,7 +157,7 @@ ul, ol { list-style: none; margin: 0; padding: 0; }
 }
 
 /* ============================================================
-   Screen Container
+   Screen Container — 纸纹底板
    ============================================================ */
 .screen {
   position: relative;
@@ -175,15 +170,40 @@ ul, ol { list-style: none; margin: 0; padding: 0; }
   background: var(--color-bg-paper);
 }
 
+/* 纸纹颗粒 */
 .screen::before {
   content: "";
   position: fixed;
   inset: 0;
   pointer-events: none;
   z-index: 0;
-  opacity: var(--paper-noise-opacity);
-  background:
-    radial-gradient(circle at top left, rgba(255,255,255,0.5), transparent);
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(139, 119, 90, 0.015) 2px,
+      rgba(139, 119, 90, 0.015) 4px
+    );
+}
+
+/* 纸面折痕 — 左侧纵向线 */
+.screen::after {
+  content: "";
+  position: fixed;
+  left: 48%;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(139, 119, 90, 0.04) 20%,
+    rgba(139, 119, 90, 0.04) 80%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 0;
 }
 
 .screen > * { position: relative; z-index: 1; }
@@ -247,8 +267,9 @@ ul, ol { list-style: none; margin: 0; padding: 0; }
   font-size: var(--font-size-h1);
   font-weight: var(--font-weight-bold);
   line-height: var(--line-height-tight);
-  letter-spacing: 0.02em;
+  letter-spacing: 0.08em;
   color: var(--color-text-primary);
+  text-shadow: 0 1px 0 rgba(255,255,255,0.6);
 }
 
 /* ============================================================
@@ -266,28 +287,38 @@ ul, ol { list-style: none; margin: 0; padding: 0; }
   position: relative;
   padding: var(--space-xl) var(--space-2xl);
   margin-bottom: var(--section-gap);
-  background: var(--color-bg-surface);
+  background: linear-gradient(135deg, var(--color-bg-surface) 0%, #f7f0e4 100%);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-paper-card);
   box-shadow: var(--shadow-paper);
   overflow: hidden;
 }
 
+/* 便签左上角贴纸胶带 */
 .paper-note::before {
   content: "";
   position: absolute;
-  inset: var(--space-sm);
-  border: var(--border-dashed);
-  border-radius: var(--radius-sm);
-  opacity: 0.08;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-2deg);
+  width: 60px;
+  height: 18px;
+  background: linear-gradient(180deg, var(--color-tape) 0%, rgba(201,168,124,0.6) 100%);
+  border-radius: 2px;
+  opacity: 0.6;
   pointer-events: none;
+}
+
+/* 便签内虚线框保留 */
+.paper-note .note-inner-border {
+  /* 由 HTML 中的占位元素提供，若无则静默降级 */
 }
 
 .note-text {
   position: relative;
   z-index: 1;
   margin: 0;
-  font-family: var(--font-family-body);
+  font-family: var(--font-family-display);
   font-size: var(--font-size-h3);
   font-weight: var(--font-weight-medium);
   line-height: var(--line-height-loose);
@@ -304,8 +335,40 @@ ul, ol { list-style: none; margin: 0; padding: 0; }
   font-size: var(--font-size-h2);
   font-weight: var(--font-weight-bold);
   line-height: var(--line-height-tight);
-  letter-spacing: 0.01em;
+  letter-spacing: 0.06em;
   color: var(--color-text-primary);
+  position: relative;
+  display: inline-block;
+}
+
+/* 标题下装饰线 */
+.section-title::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, var(--color-primary), transparent);
+  border-radius: 1px;
+  opacity: 0.4;
+}
+
+/* ============================================================
+   卡片通用样式 — 带左侧色条装饰
+   ============================================================ */
+/* 用 inset box-shadow 模拟左侧色条，无需改 HTML */
+.card-accent-copper {
+  box-shadow: inset 3px 0 0 var(--color-primary), var(--shadow-card-lift) !important;
+}
+.card-accent-green {
+  box-shadow: inset 3px 0 0 var(--color-success), var(--shadow-card-lift) !important;
+}
+.card-accent-blue {
+  box-shadow: inset 3px 0 0 var(--color-info), var(--shadow-card-lift) !important;
+}
+.card-accent-rose {
+  box-shadow: inset 3px 0 0 #C9A0A0, var(--shadow-card-lift) !important;
 }
 
 /* ============================================================
@@ -328,7 +391,7 @@ ul, ol { list-style: none; margin: 0; padding: 0; }
   background: var(--color-bg-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-card);
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-card-lift);
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
   transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s, border-color 0.2s;
@@ -336,7 +399,7 @@ ul, ol { list-style: none; margin: 0; padding: 0; }
 .tool-card:hover {
   border-color: var(--color-border-strong);
   box-shadow: var(--shadow-md);
-  transform: translateY(-2px);
+  transform: translateY(-3px);
 }
 .tool-card:active {
   transform: scale(0.96);
@@ -367,7 +430,7 @@ ul, ol { list-style: none; margin: 0; padding: 0; }
 }
 
 /* ============================================================
-   Bottom Navigation
+   Bottom Navigation — 纸页标签导航
    ============================================================ */
 .bottom-nav {
   position: fixed;
@@ -381,7 +444,7 @@ ul, ol { list-style: none; margin: 0; padding: 0; }
   padding: var(--space-sm) var(--space-md) var(--space-sm);
   background: var(--color-bg-surface);
   border-top: 1px solid var(--color-border);
-  box-shadow: 0 -1px 4px rgba(40, 30, 20, 0.04);
+  box-shadow: var(--shadow-tabbar);
   z-index: 10;
 }
 
@@ -391,7 +454,7 @@ ul, ol { list-style: none; margin: 0; padding: 0; }
   align-items: center;
   justify-content: center;
   gap: var(--space-2xs);
-  padding: var(--space-2xs) 0;
+  padding: var(--space-xs) 0;
   font-family: var(--font-family-ui);
   font-size: var(--font-size-tab);
   font-weight: var(--font-weight-medium);
@@ -399,26 +462,48 @@ ul, ol { list-style: none; margin: 0; padding: 0; }
   letter-spacing: 0.03em;
   color: var(--color-text-secondary);
   -webkit-tap-highlight-color: transparent;
-  transition: color 0.2s;
+  transition: color 0.2s, transform 0.2s;
   position: relative;
 }
 
+/* 非激活标签悬停微抬 */
+.bottom-nav a:not([aria-current]):hover {
+  transform: translateY(-2px);
+}
+
+/* 激活标签 — 模拟凸起的纸标签 */
 .bottom-nav a[aria-current="page"] {
   color: var(--color-primary);
   font-weight: var(--font-weight-bold);
+  transform: translateY(-4px);
 }
 
-/* Editorial page-marker indicator on active tab */
 .bottom-nav a[aria-current="page"]::before {
   content: "";
   position: absolute;
   top: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 20px;
-  height: 3px;
+  width: 24px;
+  height: 4px;
   background: var(--color-primary);
-  border-radius: 0 0 2px 2px;
+  border-radius: 0 0 3px 3px;
+  box-shadow: 0 1px 3px rgba(184, 115, 51, 0.3);
+}
+
+/* 标签底部小折角装饰 */
+.bottom-nav a[aria-current="page"]::after {
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 20%;
+  right: 20%;
+  height: 3px;
+  background: var(--color-bg-paper);
+  border: 1px solid var(--color-border);
+  border-top: 0;
+  border-radius: 0 0 4px 4px;
+  pointer-events: none;
 }
 
 .nav-icon {

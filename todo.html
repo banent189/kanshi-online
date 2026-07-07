@@ -128,13 +128,14 @@
       background: var(--color-bg-surface);
       border: var(--border-paper);
       border-radius: var(--radius-card);
-      box-shadow: var(--shadow-xs);
+      box-shadow: var(--shadow-card-lift);
       cursor: pointer;
       -webkit-tap-highlight-color: transparent;
       transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s;
     }
 
-    .todo-item:hover { box-shadow: var(--shadow-sm); transform: translateY(-1px); }
+    .todo-item:hover { box-shadow: var(--shadow-sm); transform: translateY(-2px); }
+    .todo-item:hover .todo-check { border-color: var(--color-primary); }
     .todo-item:active {
       transform: scale(0.98);
     }
@@ -184,6 +185,13 @@
       background: var(--color-bg-soft);
       color: var(--color-text-secondary);
     }
+
+    /* ── 每个待办左侧装饰色条 on hover ── */
+    .todo-item:nth-child(1):hover { box-shadow: inset 3px 0 0 var(--color-primary), var(--shadow-sm); transform: translateY(-2px); }
+    .todo-item:nth-child(2):hover { box-shadow: inset 3px 0 0 var(--color-success), var(--shadow-sm); transform: translateY(-2px); }
+    .todo-item:nth-child(3):hover { box-shadow: inset 3px 0 0 var(--color-info), var(--shadow-sm); transform: translateY(-2px); }
+    .todo-item:nth-child(4):hover { box-shadow: inset 3px 0 0 var(--color-warning), var(--shadow-sm); transform: translateY(-2px); }
+    .todo-item:nth-child(5):hover { box-shadow: inset 3px 0 0 #C9A0A0, var(--shadow-sm); transform: translateY(-2px); }
 
     /* ── 底部添加按钮 ── */
     .add-bottom {

@@ -95,9 +95,10 @@
       bottom: 0;
       width: var(--toolbox-tab-line);
       height: var(--space-2xs);
-      background: var(--color-success);
+      background: var(--color-primary);
       border-radius: var(--radius-pill);
       transform: translateX(-50%);
+      box-shadow: 0 1px 4px rgba(184,115,51,0.3);
     }
 
     /* ── 工具网格 ── */
@@ -128,7 +129,8 @@
       transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s, border-color 0.2s;
     }
 
-    .toolbox-card:hover { border-color: var(--color-border-strong); box-shadow: var(--shadow-md); transform: translateY(-2px); }
+    .toolbox-card:hover { border-color: var(--color-border-strong); box-shadow: var(--shadow-md); transform: translateY(-3px); }
+    .toolbox-card:hover .tool-icon { transform: scale(1.08); }
     .toolbox-card:active {
       transform: scale(0.96);
     }
