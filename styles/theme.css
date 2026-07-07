@@ -1,89 +1,74 @@
 /* ============================================================
-   简纸 Konshi — 主题系统 (Theme System)
-   纸质手帐风 · 暖调米色 · CSS 变量驱动
+   简纸 Konshi — v10 Editorial Minimal | 精致编辑风格
    ============================================================ */
 
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&display=swap');
+
 :root {
-  /* =========================
-     Brand / 品牌色
-     ========================= */
-  --color-primary: #b86b2b;
-  --color-primary-dark: #7a4318;
-  --color-primary-light: #f3d8b5;
+  /* ---- Brand Palette: Copper + Ink Green ---- */
+  --color-primary: #C4733A;
+  --color-primary-dark: #9A5A2E;
+  --color-primary-light: #E8CBB0;
 
-  /* =========================
-     Background / 纸感背景
-     ========================= */
-  --color-bg-app: #f6ead8;
-  --color-bg-paper: #f8ebda;
-  --color-bg-surface: #fff6ea;
-  --color-bg-soft: #f1dfc6;
-  --color-bg-muted: #e7cfad;
+  /* ---- Paper Backgrounds ---- */
+  --color-bg-app: #F0EBE3;
+  --color-bg-paper: #F7F2EA;
+  --color-bg-surface: #FCF8F3;
+  --color-bg-soft: #E8E0D6;
+  --color-bg-muted: #DED4C8;
 
-  /* =========================
-     Text / 文字色
-     ========================= */
-  --color-text-primary: #2f2618;
-  --color-text-secondary: #6a573d;
-  --color-text-tertiary: #9a866b;
+  /* ---- Text ---- */
+  --color-text-primary: #1C1814;
+  --color-text-secondary: #7D6E60;
+  --color-text-tertiary: #B0A294;
 
-  /* =========================
-     Border / 边框色
-     ========================= */
-  --color-border: #e6d4ba;
-  --color-border-strong: #d6b98d;
-  --color-divider: #eadcc8;
-  --color-white: #fffaf2;
+  /* ---- Borders ---- */
+  --color-border: #E3D9CE;
+  --color-border-strong: #D0C3B4;
+  --color-divider: #EAE2D8;
+  --color-white: #FFFFFF;
 
-  /* =========================
-     Functional / 功能色
-     ========================= */
-  --color-success: #5f8a45;
-  --color-warning: #d18a2e;
-  --color-error: #b94a3e;
-  --color-info: #6d9eba;
+  /* ---- Functional Colors ---- */
+  --color-success: #4A7C5E;
+  --color-warning: #C4733A;
+  --color-error: #B85C5C;
+  --color-info: #5B7FA5;
 
-  /* =========================
-     Illustration / 插画辅助色
-     ========================= */
-  --color-tape: #d9a46f;
-  --color-folder: #c49a5d;
-  --color-card-blue: #d6e2df;
-  --color-card-yellow: #f1d7a5;
+  /* ---- Craft / Illustration ---- */
+  --color-tape: #D4BFA8;
+  --color-folder: #BC8F5A;
+  --color-card-blue: #D3DEDD;
+  --color-card-yellow: #F0DFC0;
+  --color-ink-green: #4A7C5E;
 
-  /* =========================
-     Typography / 排版
-     ========================= */
-  --font-family-display: "LXGW WenKai", "Ma Shan Zheng", "STKaiti", "KaiTi", serif;
+  /* ---- Typography ---- */
+  --font-family-display: "Noto Serif SC", "STSongti", "SimSun", "Songti SC", Georgia, serif;
   --font-family-body: "LXGW WenKai", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
   --font-family-ui: "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
 
-  --font-size-xs: 12px;
-  --font-size-sm: 14px;
-  --font-size-base: 16px;
-  --font-size-md: 18px;
-  --font-size-lg: 20px;
-  --font-size-xl: 24px;
-  --font-size-2xl: 28px;
-  --font-size-h1: 24px;
+  --font-size-xs: 11px;
+  --font-size-sm: 12px;
+  --font-size-tab: 12px;
+  --font-size-body: 15px;
+  --font-size-md: 16px;
+  --font-size-h3: 17px;
   --font-size-h2: 22px;
-  --font-size-h3: 20px;
-  --font-size-body: 16px;
-  --font-size-caption: 13px;
-  --font-size-tab: 13px;
+  --font-size-h1: 28px;
+  --font-size-xl: 32px;
+  --font-size-2xl: 36px;
+  --font-size-caption: 12px;
+  --font-size-base: 15px;
 
   --font-weight-regular: 400;
   --font-weight-medium: 500;
   --font-weight-semibold: 600;
   --font-weight-bold: 700;
 
-  --line-height-tight: 1.2;
+  --line-height-tight: 1.25;
   --line-height-normal: 1.5;
-  --line-height-loose: 1.8;
+  --line-height-loose: 1.7;
 
-  /* =========================
-     Spacing / 间距 (4px 网格)
-     ========================= */
+  /* ---- Spacing (4px base) ---- */
   --space-2xs: 4px;
   --space-xs: 8px;
   --space-sm: 12px;
@@ -96,71 +81,56 @@
   --space-5xl: 64px;
   --space-6xl: 80px;
 
-  /* =========================
-     Layout / 布局
-     ========================= */
+  /* ---- Layout ---- */
   --page-padding-x: 20px;
   --section-gap: 24px;
-  --card-gap: 16px;
+  --card-gap: 14px;
+  --search-height: 48px;
+  --quick-action-size: 60px;
+  --tool-card-height: 124px;
+  --tabbar-height: 72px;
+  --status-bar-height: 44px;
 
-  --search-height: 50px;
-  --quick-action-size: 64px;
-  --tool-card-height: 128px;
-  --tabbar-height: 76px;
-  --status-bar-height: 48px;
-
-  /* =========================
-     Radius / 圆角
-     ========================= */
+  /* ---- Radius ---- */
   --radius-xs: 6px;
   --radius-sm: 10px;
   --radius-md: 14px;
   --radius-lg: 18px;
-  --radius-xl: 24px;
-  --radius-2xl: 32px;
+  --radius-xl: 22px;
+  --radius-2xl: 30px;
   --radius-pill: 999px;
-  --radius-card: 18px;
-  --radius-paper-card: 16px;
+  --radius-card: 16px;
+  --radius-paper-card: 14px;
   --radius-search: 999px;
   --radius-btn: 999px;
 
-  /* =========================
-     Shadow / 阴影
-     ========================= */
-  --shadow-xs: 0 1px 2px rgba(75, 49, 20, 0.08);
-  --shadow-sm: 0 2px 6px rgba(75, 49, 20, 0.12), 0 1px 2px rgba(75, 49, 20, 0.08);
-  --shadow-md: 0 8px 20px rgba(75, 49, 20, 0.16), 0 3px 8px rgba(75, 49, 20, 0.10);
-  --shadow-paper: 0 6px 14px rgba(96, 63, 27, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.65);
-  --shadow-inner: inset 0 2px 6px rgba(92, 58, 24, 0.12);
+  /* ---- Shadows (warm, editorial) ---- */
+  --shadow-xs: 0 1px 2px rgba(40, 30, 20, 0.04);
+  --shadow-sm: 0 2px 4px rgba(40, 30, 20, 0.05), 0 1px 2px rgba(40, 30, 20, 0.03);
+  --shadow-md: 0 4px 12px rgba(40, 30, 20, 0.07), 0 2px 4px rgba(40, 30, 20, 0.04);
+  --shadow-lg: 0 8px 24px rgba(40, 30, 20, 0.09), 0 4px 8px rgba(40, 30, 20, 0.05);
+  --shadow-paper: 0 2px 8px rgba(50, 38, 25, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  --shadow-inner: inset 0 1px 3px rgba(50, 38, 25, 0.05);
 
-  /* =========================
-     Borders / 边框
-     ========================= */
+  /* ---- Border shorthands ---- */
   --border-paper: 1px solid var(--color-border);
   --border-paper-strong: 1px solid var(--color-border-strong);
+  --border-dashed: 1px dashed var(--color-border-strong);
 
-  /* =========================
-     Opacity / 透明度
-     ========================= */
-  --opacity-disabled: 0.45;
-  --opacity-muted: 0.68;
+  /* ---- Opacity ---- */
+  --opacity-disabled: 0.35;
+  --opacity-muted: 0.55;
 
-  /* =========================
-     Paper Texture / 纸张质感
-     ========================= */
-  --paper-noise-opacity: 0.06;
-  --paper-fold-opacity: 0.12;
-  --paper-edge-opacity: 0.18;
+  /* ---- Paper Texture ---- */
+  --paper-noise-opacity: 0.03;
+  --paper-fold-opacity: 0.08;
+  --paper-edge-opacity: 0.12;
 }
 
 /* ============================================================
-   Base Reset
+   Reset & Base
    ============================================================ */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
+*, *::before, *::after { box-sizing: border-box; }
 
 html {
   font-family: var(--font-family-body);
@@ -169,6 +139,7 @@ html {
   background: var(--color-bg-app);
   -webkit-text-size-adjust: 100%;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
@@ -177,114 +148,27 @@ body {
   background: var(--color-bg-app);
 }
 
-button {
-  font: inherit;
-  border: 0;
-  cursor: pointer;
-  background: transparent;
-}
+button { font: inherit; border: 0; cursor: pointer; background: transparent; transition: opacity 0.15s, transform 0.15s; }
+button:active { transform: scale(0.97); }
+a { color: inherit; text-decoration: none; transition: color 0.15s; }
+input, textarea { font: inherit; border: 0; outline: none; }
+ul, ol { list-style: none; margin: 0; padding: 0; }
 
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-input, textarea {
-  font: inherit;
-  border: 0;
-  outline: none;
-}
-
-ul, ol {
-  list-style: none;
-  margin: 0;
-  padding: 0;
+/* Keyboard focus ring */
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-xs);
 }
 
 /* ============================================================
-   Shared Components
+   Screen Container
    ============================================================ */
-
-/* ── 状态栏 ── */
-.status-bar {
-  height: var(--status-bar-height);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: var(--space-lg) var(--space-2xl) 0;
-  font-family: var(--font-family-ui);
-  font-size: var(--font-size-md);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-text-primary);
-  flex-shrink: 0;
-}
-
-.status-left {
-  font-weight: var(--font-weight-bold);
-  font-size: var(--font-size-md);
-}
-
-.status-icons {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-xs);
-  color: var(--color-text-primary);
-}
-
-.signal-bars {
-  display: inline-flex;
-  align-items: flex-end;
-  gap: 2px;
-  height: 16px;
-}
-
-.signal-bars .bar {
-  width: 3px;
-  background: currentColor;
-  border-radius: 1px;
-}
-
-.wifi-icon {
-  font-size: var(--font-size-lg);
-  line-height: 1;
-}
-
-.battery-icon {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  width: 25px;
-  height: 12px;
-  padding: 1.5px;
-  border: 1.5px solid currentColor;
-  border-radius: 2px;
-  box-sizing: content-box;
-}
-
-.battery-icon::after {
-  content: '';
-  position: absolute;
-  right: -5px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 3px;
-  height: 6px;
-  background: currentColor;
-  border-radius: 0 1px 1px 0;
-}
-
-.battery-fill {
-  width: 72%;
-  height: 100%;
-  background: currentColor;
-  border-radius: 1px;
-}
-
-/* ── 页面容器 ── */
 .screen {
   position: relative;
   width: 100%;
   min-height: 100vh;
+  min-height: 100dvh;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -299,22 +183,59 @@ ul, ol {
   z-index: 0;
   opacity: var(--paper-noise-opacity);
   background:
-    radial-gradient(circle at top left, var(--color-bg-surface), transparent),
-    radial-gradient(circle at bottom right, var(--color-bg-soft), transparent);
+    radial-gradient(circle at top left, rgba(255,255,255,0.5), transparent);
 }
 
-.screen > * {
-  position: relative;
-  z-index: 1;
+.screen > * { position: relative; z-index: 1; }
+
+/* ============================================================
+   Status Bar
+   ============================================================ */
+.status-bar {
+  height: var(--status-bar-height);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-lg) var(--space-2xl) 0;
+  font-family: var(--font-family-ui);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  flex-shrink: 0;
 }
 
-/* ── 页面主内容 ── */
-.page-main {
-  flex: 1;
-  padding: 0 var(--page-padding-x) var(--tabbar-height);
+.status-left {
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-md);
+  letter-spacing: 0.5px;
 }
 
-/* ── 页面大标题 ── */
+.status-icons {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  color: var(--color-text-secondary);
+}
+
+.signal-bars { display: inline-flex; align-items: flex-end; gap: 2px; height: 14px; }
+.signal-bars .bar { width: 3px; background: currentColor; border-radius: 1px; }
+.wifi-icon { font-size: var(--font-size-md); line-height: 1; }
+
+.battery-icon {
+  position: relative; display: inline-flex; align-items: center;
+  width: 22px; height: 11px; padding: 1.5px;
+  border: 1.5px solid currentColor; border-radius: 2px; box-sizing: content-box;
+}
+.battery-icon::after {
+  content: ''; position: absolute; right: -4px; top: 50%;
+  transform: translateY(-50%); width: 3px; height: 5px;
+  background: currentColor; border-radius: 0 1px 1px 0;
+}
+.battery-fill { width: 72%; height: 100%; background: currentColor; border-radius: 1px; }
+
+/* ============================================================
+   Page Header
+   ============================================================ */
 .page-header {
   padding: var(--space-2xl) var(--page-padding-x) var(--space-xl);
   text-align: center;
@@ -326,20 +247,27 @@ ul, ol {
   font-size: var(--font-size-h1);
   font-weight: var(--font-weight-bold);
   line-height: var(--line-height-tight);
-  letter-spacing: var(--space-2xs);
+  letter-spacing: 0.02em;
   color: var(--color-text-primary);
 }
 
-/* ── 纸面便签卡片 ── */
+/* ============================================================
+   Page Content
+   ============================================================ */
+.page-main {
+  flex: 1;
+  padding: 0 var(--page-padding-x) var(--tabbar-height);
+}
+
+/* ============================================================
+   Paper Note / 纸面便签
+   ============================================================ */
 .paper-note {
   position: relative;
-  min-height: 130px;
-  display: grid;
-  place-items: center;
   padding: var(--space-xl) var(--space-2xl);
-  margin-bottom: var(--space-xl);
+  margin-bottom: var(--section-gap);
   background: var(--color-bg-surface);
-  border: var(--border-paper);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-paper-card);
   box-shadow: var(--shadow-paper);
   overflow: hidden;
@@ -349,9 +277,9 @@ ul, ol {
   content: "";
   position: absolute;
   inset: var(--space-sm);
-  border: 1px dashed var(--color-border-strong);
-  border-radius: var(--radius-md);
-  opacity: 0.12;
+  border: var(--border-dashed);
+  border-radius: var(--radius-sm);
+  opacity: 0.08;
   pointer-events: none;
 }
 
@@ -359,7 +287,7 @@ ul, ol {
   position: relative;
   z-index: 1;
   margin: 0;
-  font-family: var(--font-family-display);
+  font-family: var(--font-family-body);
   font-size: var(--font-size-h3);
   font-weight: var(--font-weight-medium);
   line-height: var(--line-height-loose);
@@ -367,7 +295,80 @@ ul, ol {
   color: var(--color-text-primary);
 }
 
-/* ── 底部导航 ── */
+/* ============================================================
+   Section Title
+   ============================================================ */
+.section-title {
+  margin: 0 0 var(--space-md);
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+  letter-spacing: 0.01em;
+  color: var(--color-text-primary);
+}
+
+/* ============================================================
+   Tool Grid & Cards (global)
+   ============================================================ */
+.tool-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--card-gap);
+}
+
+.tool-card {
+  min-height: var(--tool-card-height);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-xs);
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s, border-color 0.2s;
+}
+.tool-card:hover {
+  border-color: var(--color-border-strong);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+.tool-card:active {
+  transform: scale(0.96);
+  box-shadow: var(--shadow-xs);
+}
+
+.tool-icon {
+  width: 56px;
+  height: 56px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-xl);
+  color: var(--color-primary-dark);
+  background: var(--color-bg-paper);
+  box-shadow: var(--shadow-xs);
+  transition: transform 0.2s;
+}
+
+.tool-card-title {
+  margin: 0;
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
+  text-align: center;
+  color: var(--color-text-primary);
+}
+
+/* ============================================================
+   Bottom Navigation
+   ============================================================ */
 .bottom-nav {
   position: fixed;
   left: 0;
@@ -377,10 +378,10 @@ ul, ol {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   align-items: center;
-  padding: var(--space-sm) var(--space-md) var(--space-xs);
+  padding: var(--space-sm) var(--space-md) var(--space-sm);
   background: var(--color-bg-surface);
-  border-top: var(--border-paper);
-  box-shadow: var(--shadow-sm);
+  border-top: 1px solid var(--color-border);
+  box-shadow: 0 -1px 4px rgba(40, 30, 20, 0.04);
   z-index: 10;
 }
 
@@ -390,18 +391,34 @@ ul, ol {
   align-items: center;
   justify-content: center;
   gap: var(--space-2xs);
-  font-family: var(--font-family-display);
+  padding: var(--space-2xs) 0;
+  font-family: var(--font-family-ui);
   font-size: var(--font-size-tab);
   font-weight: var(--font-weight-medium);
-  line-height: var(--line-height-tight);
+  line-height: 1;
+  letter-spacing: 0.03em;
   color: var(--color-text-secondary);
-  transition: color 0.15s;
   -webkit-tap-highlight-color: transparent;
+  transition: color 0.2s;
+  position: relative;
 }
 
 .bottom-nav a[aria-current="page"] {
   color: var(--color-primary);
   font-weight: var(--font-weight-bold);
+}
+
+/* Editorial page-marker indicator on active tab */
+.bottom-nav a[aria-current="page"]::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 3px;
+  background: var(--color-primary);
+  border-radius: 0 0 2px 2px;
 }
 
 .nav-icon {
@@ -413,93 +430,12 @@ ul, ol {
   color: currentColor;
 }
 
-/* ── 纸面胶带装饰 ── */
-.tape-deco {
-  position: absolute;
-  width: var(--space-5xl);
-  height: var(--space-xl);
-  background: var(--color-tape);
-  border-radius: var(--radius-xs);
-  opacity: var(--opacity-muted);
-}
-
-.tape-deco.left {
-  top: var(--space-sm);
-  left: var(--space-lg);
-  transform: rotate(-12deg);
-}
-
-.tape-deco.right {
-  top: var(--space-xs);
-  right: var(--space-4xl);
-  transform: rotate(14deg);
-}
-
-/* ── 绿色小枝装饰 ── */
-.branch-deco {
-  position: absolute;
-  font-size: var(--font-size-2xl);
-  color: var(--color-success);
-  opacity: var(--opacity-muted);
-}
-
-/* ── Section title ── */
-.section-title {
-  margin: 0 0 var(--space-lg);
-  font-family: var(--font-family-display);
-  font-size: var(--font-size-h2);
-  font-weight: var(--font-weight-bold);
-  line-height: var(--line-height-tight);
-  color: var(--color-text-primary);
-}
-
-/* ── 工具网格 ── */
-.tool-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--card-gap);
-}
-
-/* ── 工具卡片 ── */
-.tool-card {
-  min-height: var(--tool-card-height);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-sm);
-  padding: var(--space-md) var(--space-xs);
-  background: var(--color-bg-surface);
-  border: var(--border-paper);
-  border-radius: var(--radius-card);
-  box-shadow: var(--shadow-paper);
-  cursor: pointer;
-  transition: transform 0.15s, box-shadow 0.15s;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.tool-card:active {
-  transform: scale(0.97);
-  box-shadow: var(--shadow-xs);
-}
-
-.tool-icon {
-  width: 64px;
-  height: 64px;
-  display: grid;
-  place-items: center;
-  border-radius: var(--radius-md);
-  font-size: var(--font-size-2xl);
-  color: var(--color-primary-dark);
-  background: var(--color-bg-paper);
-}
-
-.tool-card-title {
-  margin: 0;
-  font-family: var(--font-family-display);
-  font-size: var(--font-size-body);
-  font-weight: var(--font-weight-semibold);
-  line-height: var(--line-height-tight);
-  text-align: center;
-  color: var(--color-text-primary);
+/* ============================================================
+   Reduced Motion
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }

@@ -29,7 +29,8 @@
       width: var(--space-4xl);
       height: var(--space-4xl);
       font-size: var(--font-size-2xl);
-      color: var(--color-warning);
+      color: var(--color-success);
+      filter: saturate(0.85);
     }
 
     .brand-title {
@@ -53,15 +54,15 @@
       height: var(--space-4xl);
       display: grid;
       place-items: center;
-      background: var(--color-bg-paper);
+      background: var(--color-bg-surface);
       color: var(--color-text-secondary);
       border: var(--border-paper);
       border-radius: var(--radius-pill);
       box-shadow: var(--shadow-xs);
       font-size: var(--font-size-xl);
-      transition: transform 0.15s;
+      transition: transform 0.15s, box-shadow 0.15s;
     }
-
+    .icon-button:hover { box-shadow: var(--shadow-sm); }
     .icon-button:active {
       transform: scale(0.92);
     }
@@ -134,7 +135,7 @@
 
     .search-icon {
       font-size: var(--font-size-xl);
-      color: var(--color-text-primary);
+      color: var(--color-text-tertiary);
     }
 
     .search-box input {
@@ -170,8 +171,10 @@
       box-shadow: var(--shadow-sm);
       color: var(--color-text-primary);
       -webkit-tap-highlight-color: transparent;
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s, border-color 0.2s;
     }
 
+    .quick-action:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
     .quick-action:active {
       transform: scale(0.95);
     }
@@ -218,13 +221,16 @@
       background: var(--color-bg-surface);
       border: var(--border-paper);
       border-radius: var(--radius-card);
-      box-shadow: var(--shadow-paper);
+      box-shadow: var(--shadow-sm);
       cursor: pointer;
       -webkit-tap-highlight-color: transparent;
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s, border-color 0.2s;
     }
 
+    .home-tool-card:hover { border-color: var(--color-border-strong); box-shadow: var(--shadow-md); transform: translateY(-2px); }
     .home-tool-card:active {
       transform: scale(0.97);
+      box-shadow: var(--shadow-xs);
     }
 
     .tool-illustration {
@@ -238,8 +244,10 @@
       box-shadow: var(--shadow-xs);
       font-size: var(--font-size-2xl);
       color: var(--color-primary-dark);
+      transition: transform 0.2s;
     }
 
+    .home-tool-card:hover .tool-illustration { transform: scale(1.04); }
     .home-tool-card:nth-child(1) .tool-illustration {
       background: var(--color-card-blue);
     }
@@ -291,9 +299,11 @@
       font-family: var(--font-family-display);
       font-size: var(--font-size-body);
       font-weight: var(--font-weight-medium);
-      color: var(--color-text-secondary);
+      color: var(--color-text-tertiary);
+      transition: color 0.15s;
     }
 
+    .storage-link:hover { color: var(--color-success); }
     .storage-box {
       position: relative;
       min-height: calc(var(--tool-card-height) + var(--space-4xl));

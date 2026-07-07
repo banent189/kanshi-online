@@ -12,6 +12,9 @@ dist
 dist-ssr
 *.local
 
+# Wrangler / Cloudflare cache
+.wrangler/
+
 # Legacy / 旧版源码
 _legacy/
 

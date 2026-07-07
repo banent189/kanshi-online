@@ -81,12 +81,14 @@
       background: var(--color-bg-surface);
       border: var(--border-paper);
       border-radius: var(--radius-card);
-      box-shadow: var(--shadow-paper);
+      box-shadow: var(--shadow-sm);
       overflow: hidden;
       cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
       -webkit-tap-highlight-color: transparent;
     }
 
+    .box-card:hover { border-color: var(--color-border-strong); box-shadow: var(--shadow-md); transform: translateY(-2px); }
     .box-card:active {
       transform: scale(0.98);
     }
@@ -199,6 +201,12 @@
       font-family: var(--font-family-display);
       font-size: var(--font-size-h3);
       font-weight: var(--font-weight-semibold);
+    }
+    .create-box:hover {
+      border-style: solid;
+      border-color: var(--color-primary-light);
+      color: var(--color-primary);
+      box-shadow: var(--shadow-sm);
     }
   </style>
 </head>
